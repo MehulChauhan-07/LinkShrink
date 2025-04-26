@@ -3,16 +3,25 @@ const { getUser } = require("../services/auth_uid");
 // authentication
 // soft scan
 function checkForAuthorization(req, res, next) {
+  // Check for token in cookies first
   const tokenCookies = req.cookies?.uid;
+
+  // Check for Bearer token in Authorization header
+  const authHeader = req.headers.authorization;
+  let token = tokenCookies;
+
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    token = authHeader.split(" ")[1];
+  }
+
   req.user = null;
-  if (!tokenCookies) {
-    console.log("No Authorization header, skipping auth check");
+  if (!token) {
+    console.log("No Authorization token found");
     return next();
   }
-  const token = tokenCookies;
+  // const token = tokenCookies;
 
   const user = getUser(token);
-
   req.user = user;
   next();
 }

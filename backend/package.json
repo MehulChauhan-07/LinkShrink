@@ -1,5 +1,5 @@
 {
-  "name": "short_url-auth_stateless-all",
+  "name": "LinkShrink_Backend",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {

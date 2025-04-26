@@ -1,785 +1,1085 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <link rel="stylesheet" href="./home.css" /> -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-    <title>URL Shortener</title>
-    <style>
-      /* Base Styles */
-      :root {
-        --primary-color: #4361ee;
-        --primary-dark: #3a56d4;
-        --secondary-color: #7209b7;
-        --accent-color: #f72585;
-        --light-bg: #f8f9fa;
-        --dark-bg: #212529;
-        --text-color: #333;
-        --light-text: #f8f9fa;
-        --gray-light: #e9ecef;
-        --gray-medium: #adb5bd;
-        --gray-dark: #6c757d;
-        --success: #28a745;
-        --danger: #dc3545;
-        --warning: #ffc107;
-        --info: #17a2b8;
-        --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        --radius: 8px;
-        --transition: all 0.3s ease;
-      }
 
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <title>URL Shortener</title>
+  <style>
+    /* Base Styles */
+    :root {
+      --primary-color: #4361ee;
+      --primary-dark: #3a56d4;
+      --secondary-color: #7209b7;
+      --accent-color: #f72585;
+      --light-bg: #f8f9fa;
+      --dark-bg: #212529;
+      --text-color: #333;
+      --light-text: #f8f9fa;
+      --gray-light: #e9ecef;
+      --gray-medium: #adb5bd;
+      --gray-dark: #6c757d;
+      --success: #28a745;
+      --danger: #dc3545;
+      --warning: #ffc107;
+      --info: #17a2b8;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --radius: 8px;
+      --transition: all 0.3s ease;
+    }
 
-      body {
-        font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
-        color: var(--text-color);
-        line-height: 1.6;
-        background-color: var(--light-bg);
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-      .container {
-        width: 90%;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 15px;
-      }
+    body {
+      font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+      color: var(--text-color);
+      line-height: 1.6;
+      background-color: var(--light-bg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-      /* Navbar */
-      .navbar {
-        background-color: white;
-        box-shadow: var(--box-shadow);
-        padding: 15px 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-      }
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
 
-      .logo {
-        display: flex;
-        align-items: center;
-        margin-left: 20px;
-        font-weight: bold;
-        font-size: 1.5rem;
-        color: var(--primary-color);
-      }
+    /* Navbar */
+    .navbar {
+      background-color: white;
+      box-shadow: var(--box-shadow);
+      padding: 15px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-      .logo i {
-        margin-right: 10px;
-        font-size: 1.8rem;
-      }
+    .logo {
+      display: flex;
+      align-items: center;
+      margin-left: 20px;
+      font-weight: bold;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+    }
 
-      .user-info {
-        display: flex;
-        align-items: center;
-        margin-right: 20px;
-        gap: 15px;
-      }
+    .logo i {
+      margin-right: 10px;
+      font-size: 1.8rem;
+    }
 
-      .user-info span {
-        color: var(--gray-dark);
-      }
+    .user-info {
+      display: flex;
+      align-items: center;
+      margin-right: 20px;
+      gap: 15px;
+    }
 
-      /* Hero Section */
-      .hero-section {
-        background: linear-gradient(
-          135deg,
+    .user-info span {
+      color: var(--gray-dark);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg,
           var(--primary-color) 0%,
-          var(--secondary-color) 100%
-        );
-        color: white;
-        padding: 60px 0;
-        text-align: center;
-      }
+          var(--secondary-color) 100%);
+      color: white;
+      padding: 60px 0;
+      text-align: center;
+    }
 
-      .hero-section h1 {
-        font-size: 2.5rem;
-        margin-bottom: 15px;
-        animation: fadeInDown 1s;
-      }
+    .hero-section h1 {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+      animation: fadeInDown 1s;
+    }
 
-      .hero-section p {
-        font-size: 1.2rem;
-        margin-bottom: 30px;
-        opacity: 0.9;
-        animation: fadeInUp 1s;
-      }
+    .hero-section p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      opacity: 0.9;
+      animation: fadeInUp 1s;
+    }
 
-      /* URL Form */
-      .url-form {
-        max-width: 700px;
-        margin: 0 auto 30px;
-        animation: fadeIn 1.2s;
-      }
+    /* URL Form */
+    .url-form {
+      max-width: 700px;
+      margin: 0 auto 30px;
+      animation: fadeIn 1.2s;
+    }
 
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    @media (min-width: 768px) {
       form {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      @media (min-width: 768px) {
-        form {
-          flex-direction: row;
-        }
+        flex-direction: row;
+        flex-wrap: wrap;
       }
 
       .input-group {
-        position: relative;
-        flex-grow: 1;
+        flex: 1;
       }
 
-      .input-icon {
-        position: absolute;
-        top: 50%;
-        left: 15px;
-        transform: translateY(-50%);
-        color: var(--gray-medium);
-      }
-
-      input[type="url"],
-      input[type="text"] {
-        width: 100%;
-        padding: 15px 15px 15px 45px;
-        border: none;
-        border-radius: var(--radius);
-        font-size: 1rem;
-        outline: none;
-        transition: var(--transition);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-
-      input[type="url"]:focus,
-      input[type="text"]:focus {
-        box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
-      }
-
-      input.error {
-        border: 2px solid var(--danger);
-        animation: shake 0.5s;
-      }
-
-      .btn {
-        padding: 12px 24px;
-        border: none;
-        border-radius: var(--radius);
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-      }
-
-      .btn-primary {
-        background-color: white;
-        color: var(--primary-color);
-      }
-
-      .btn-primary:hover {
-        background-color: var(--gray-light);
-        transform: translateY(-2px);
-      }
-
-      .btn-outline {
-        background-color: transparent;
-        color: white;
-        border: 2px solid white;
-      }
-
-      .btn-outline:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-      }
-
-      .btn-copy {
-        background-color: transparent;
-        color: var(--gray-dark);
-        padding: 8px;
-      }
-
-      .btn-copy:hover {
-        color: var(--primary-color);
-      }
-
-      .btn-copy.copied {
-        color: var(--success);
-      }
-
-      /* Result Card */
-      .result-card {
-        background-color: white;
-        border-radius: var(--radius);
-        padding: 20px;
-        max-width: 700px;
-        margin: 0 auto;
-        box-shadow: var(--box-shadow);
-        animation: slideUp 0.5s;
-      }
-
-      .result-card h3 {
-        color: var(--primary-color);
-        margin-bottom: 15px;
-      }
-
-      .shortened-url {
+      .button-group {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: var(--gray-light);
-        padding: 10px 15px;
-        border-radius: var(--radius);
-        margin-bottom: 15px;
+        gap: 10px;
+      }
+    }
+
+    .input-group {
+      position: relative;
+      flex-grow: 1;
+    }
+
+    .input-icon {
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      color: var(--gray-medium);
+    }
+
+    input[type="url"],
+    input[type="text"] {
+      width: 100%;
+      padding: 15px 15px 15px 45px;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      outline: none;
+      transition: var(--transition);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="url"]:focus,
+    input[type="text"]:focus {
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+    }
+
+    input.error {
+      border: 2px solid var(--danger);
+      animation: shake 0.5s;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background-color: white;
+      color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--gray-light);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+
+    .btn-outline:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-copy {
+      background-color: transparent;
+      color: var(--gray-dark);
+      padding: 8px;
+    }
+
+    .btn-copy:hover {
+      color: var(--primary-color);
+    }
+
+    .btn-copy.copied {
+      color: var(--success);
+    }
+
+    /* Result Card */
+    .result-card {
+      background-color: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      max-width: 700px;
+      margin: 0 auto;
+      box-shadow: var(--box-shadow);
+      animation: slideUp 0.5s;
+    }
+
+    .result-card h3 {
+      color: var(--primary-color);
+      margin-bottom: 15px;
+    }
+
+    .shortened-url {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--gray-light);
+      padding: 10px 15px;
+      border-radius: var(--radius);
+      margin-bottom: 15px;
+    }
+
+    .shortened-url span {
+      font-weight: 500;
+      word-break: break-all;
+    }
+
+    .qr-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
+    }
+
+    /* Stats Section */
+    .stats-section {
+      padding: 50px 0;
+      background-color: white;
+    }
+
+    .stats-section h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: var(--dark-bg);
+    }
+
+    .stats-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .stats-card {
+      background-color: var(--light-bg);
+      border-radius: var(--radius);
+      padding: 25px;
+      min-width: 200px;
+      text-align: center;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+    }
+
+    .stats-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stats-icon {
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+
+    .stats-card h3 {
+      font-size: 2.2rem;
+      margin-bottom: 5px;
+      color: var(--dark-bg);
+    }
+
+    .stats-card p {
+      color: var(--gray-dark);
+    }
+
+    /* URLs Section */
+    .urls-section {
+      padding: 50px 0;
+    }
+
+    .urls-section h2 {
+      margin-bottom: 20px;
+    }
+
+    .table-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .search-box {
+      position: relative;
+      flex-grow: 1;
+      max-width: 400px;
+    }
+
+    .search-box i {
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      transform: translateY(-50%);
+      color: var(--gray-medium);
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 12px 12px 40px;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+    }
+
+    .view-toggle {
+      display: flex;
+      gap: 10px;
+    }
+
+    .toggle-btn {
+      background-color: white;
+      border: 1px solid var(--gray-light);
+      border-radius: var(--radius);
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .toggle-btn.active {
+      background-color: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+
+    /* Table View */
+    .table-view {
+      display: none;
+      overflow-x: auto;
+    }
+
+    .table-view.active {
+      display: block;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      box-shadow: var(--box-shadow);
+      background-color: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    thead {
+      background-color: var(--gray-light);
+    }
+
+    th {
+      text-align: left;
+      padding: 15px;
+      font-weight: 600;
+      color: var(--gray-dark);
+    }
+
+    td {
+      padding: 15px;
+      border-bottom: 1px solid var(--gray-light);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr {
+      transition: var(--transition);
+    }
+
+    tr:hover {
+      background-color: var(--gray-light);
+    }
+
+    tr.highlight {
+      background-color: rgba(67, 97, 238, 0.1);
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .action-btn {
+      background: transparent;
+      border: none;
+      font-size: 1rem;
+      color: var(--gray-dark);
+      cursor: pointer;
+      transition: var(--transition);
+      padding: 5px;
+    }
+
+    .action-btn:hover {
+      color: var(--primary-color);
+    }
+
+    .click-count {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    /* Cards View */
+    .cards-view {
+      display: none;
+    }
+
+    .cards-view.active {
+      display: block;
+    }
+
+    .url-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .url-card {
+      background-color: white;
+      border-radius: var(--radius);
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+      overflow: hidden;
+    }
+
+    .url-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .url-card.highlight {
+      box-shadow: 0 0 0 3px var(--primary-color);
+    }
+
+    .card-header {
+      background-color: var(--gray-light);
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .short-id-label {
+      color: var(--gray-dark);
+      font-size: 0.9rem;
+    }
+
+    .short-id {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    .card-body {
+      padding: 15px;
+    }
+
+    .redirect-url {
+      margin-bottom: 10px;
+      word-break: break-all;
+      line-height: 1.4;
+    }
+
+    .click-info,
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      color: var(--gray-dark);
+    }
+
+    .card-footer {
+      padding: 15px;
+      background-color: var(--gray-light);
+      display: flex;
+      gap: 10px;
+    }
+
+    .visit-btn {
+      background-color: var(--primary-color);
+      color: white;
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: var(--radius);
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .visit-btn:hover {
+      background-color: var(--primary-dark);
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 30px;
+      border-radius: var(--radius);
+      max-width: 90%;
+      width: 400px;
+      text-align: center;
+      position: relative;
+      animation: fadeIn 0.3s;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gray-dark);
+    }
+
+    .close-btn:hover {
+      color: var(--danger);
+    }
+
+    #modal-qr-code {
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    #modal-url {
+      margin-bottom: 20px;
+      word-break: break-all;
+      color: var(--gray-dark);
+    }
+
+    /* Footer */
+    .footer {
+      background-color: var(--dark-bg);
+      color: var(--light-text);
+      padding: 30px 0;
+      margin-top: auto;
+    }
+
+    .footer .container {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
       }
 
-      .shortened-url span {
-        font-weight: 500;
-        word-break: break-all;
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
       }
 
-      .qr-container {
-        display: flex;
-        justify-content: center;
-        margin-top: 15px;
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
       }
 
-      /* Stats Section */
-      .stats-section {
-        padding: 50px 0;
-        background-color: white;
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
       }
 
-      .stats-section h2 {
-        text-align: center;
-        margin-bottom: 30px;
-        color: var(--dark-bg);
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0);
       }
 
-      .stats-container {
-        display: flex;
-        justify-content: center;
-        gap: 30px;
-        flex-wrap: wrap;
+      10%,
+      30%,
+      50%,
+      70%,
+      90% {
+        transform: translateX(-5px);
       }
 
-      .stats-card {
-        background-color: var(--light-bg);
-        border-radius: var(--radius);
-        padding: 25px;
-        min-width: 200px;
-        text-align: center;
-        box-shadow: var(--box-shadow);
-        transition: var(--transition);
+      20%,
+      40%,
+      60%,
+      80% {
+        transform: translateX(5px);
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .hero-section {
+        padding: 40px 0;
       }
 
-      .stats-card:hover {
-        transform: translateY(-5px);
-      }
-
-      .stats-icon {
+      .hero-section h1 {
         font-size: 2rem;
-        color: var(--primary-color);
-        margin-bottom: 10px;
-      }
-
-      .stats-card h3 {
-        font-size: 2.2rem;
-        margin-bottom: 5px;
-        color: var(--dark-bg);
-      }
-
-      .stats-card p {
-        color: var(--gray-dark);
-      }
-
-      /* URLs Section */
-      .urls-section {
-        padding: 50px 0;
-      }
-
-      .urls-section h2 {
-        margin-bottom: 20px;
       }
 
       .table-controls {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        flex-wrap: wrap;
-        gap: 15px;
+        flex-direction: column;
+        align-items: flex-start;
       }
 
       .search-box {
-        position: relative;
-        flex-grow: 1;
-        max-width: 400px;
-      }
-
-      .search-box i {
-        position: absolute;
-        top: 50%;
-        left: 15px;
-        transform: translateY(-50%);
-        color: var(--gray-medium);
-      }
-
-      .search-box input {
-        width: 100%;
-        padding: 12px 12px 12px 40px;
-        border: 1px solid var(--gray-light);
-        border-radius: var(--radius);
-        font-size: 0.95rem;
-      }
-
-      .view-toggle {
-        display: flex;
-        gap: 10px;
-      }
-
-      .toggle-btn {
-        background-color: white;
-        border: 1px solid var(--gray-light);
-        border-radius: var(--radius);
-        padding: 8px 12px;
-        cursor: pointer;
-        transition: var(--transition);
-      }
-
-      .toggle-btn.active {
-        background-color: var(--primary-color);
-        color: white;
-        border-color: var(--primary-color);
-      }
-
-      /* Table View */
-      .table-view {
-        display: none;
-        overflow-x: auto;
-      }
-
-      .table-view.active {
-        display: block;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        box-shadow: var(--box-shadow);
-        background-color: white;
-        border-radius: var(--radius);
-        overflow: hidden;
-      }
-
-      thead {
-        background-color: var(--gray-light);
-      }
-
-      th {
-        text-align: left;
-        padding: 15px;
-        font-weight: 600;
-        color: var(--gray-dark);
-      }
-
-      td {
-        padding: 15px;
-        border-bottom: 1px solid var(--gray-light);
-        vertical-align: middle;
-      }
-
-      tr:last-child td {
-        border-bottom: none;
-      }
-
-      tr {
-        transition: var(--transition);
-      }
-
-      tr:hover {
-        background-color: var(--gray-light);
-      }
-
-      tr.highlight {
-        background-color: rgba(67, 97, 238, 0.1);
-      }
-
-      .actions {
-        display: flex;
-        gap: 10px;
-      }
-
-      .action-btn {
-        background: transparent;
-        border: none;
-        font-size: 1rem;
-        color: var(--gray-dark);
-        cursor: pointer;
-        transition: var(--transition);
-        padding: 5px;
-      }
-
-      .action-btn:hover {
-        color: var(--primary-color);
-      }
-
-      .click-count {
-        font-weight: 600;
-        color: var(--primary-color);
-      }
-
-      /* Cards View */
-      .cards-view {
-        display: none;
-      }
-
-      .cards-view.active {
-        display: block;
-      }
-
-      .url-cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 20px;
-      }
-
-      .url-card {
-        background-color: white;
-        border-radius: var(--radius);
-        box-shadow: var(--box-shadow);
-        transition: var(--transition);
-        overflow: hidden;
-      }
-
-      .url-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-      }
-
-      .url-card.highlight {
-        box-shadow: 0 0 0 3px var(--primary-color);
-      }
-
-      .card-header {
-        background-color: var(--gray-light);
-        padding: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      .short-id-label {
-        color: var(--gray-dark);
-        font-size: 0.9rem;
-      }
-
-      .short-id {
-        font-weight: 600;
-        color: var(--primary-color);
-      }
-
-      .card-body {
-        padding: 15px;
-      }
-
-      .redirect-url {
-        margin-bottom: 10px;
-        word-break: break-all;
-        line-height: 1.4;
-      }
-
-      .click-info,
-      .user-info {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: 10px;
-        color: var(--gray-dark);
-      }
-
-      .card-footer {
-        padding: 15px;
-        background-color: var(--gray-light);
-        display: flex;
-        gap: 10px;
-      }
-
-      .visit-btn {
-        background-color: var(--primary-color);
-        color: white;
-        text-decoration: none;
-        padding: 8px 12px;
-        border-radius: var(--radius);
-        margin-left: auto;
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        font-size: 0.9rem;
-        transition: var(--transition);
-      }
-
-      .visit-btn:hover {
-        background-color: var(--primary-dark);
-      }
-
-      /* Modal */
-      .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-      }
-
-      .modal-content {
-        background-color: white;
-        padding: 30px;
-        border-radius: var(--radius);
-        max-width: 90%;
-        width: 400px;
-        text-align: center;
-        position: relative;
-        animation: fadeIn 0.3s;
-      }
-
-      .close-btn {
-        position: absolute;
-        top: 10px;
-        right: 15px;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: var(--gray-dark);
-      }
-
-      .close-btn:hover {
-        color: var(--danger);
-      }
-
-      #modal-qr-code {
-        margin: 20px 0;
-        display: flex;
-        justify-content: center;
-      }
-
-      #modal-url {
-        margin-bottom: 20px;
-        word-break: break-all;
-        color: var(--gray-dark);
-      }
-
-      /* Footer */
-      .footer {
-        background-color: var(--dark-bg);
-        color: var(--light-text);
-        padding: 30px 0;
-        margin-top: auto;
+        max-width: 100%;
       }
 
       .footer .container {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 20px;
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    /* Additional Custom Styles */
+    .custom-url-group {
+      display: none;
+      margin-top: 10px;
+      flex-basis: 100%;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .error-message {
+      color: var(--danger);
+      font-size: 0.85rem;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .alert {
+      padding: 10px 15px;
+      border-radius: var(--radius);
+      margin: 15px 0;
+      font-weight: 500;
+    }
+
+    .alert-success {
+      background-color: rgba(40, 167, 69, 0.15);
+      color: var(--success);
+      border-left: 4px solid var(--success);
+    }
+
+    .alert-danger {
+      background-color: rgba(220, 53, 69, 0.15);
+      color: var(--danger);
+      border-left: 4px solid var(--danger);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 30px;
+      color: var(--gray-dark);
+      font-style: italic;
+    }
+
+    .sr-only-announcement {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .original-url {
+      color: var(--text-color);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .original-url:hover {
+      color: var(--primary-color);
+      text-decoration: underline;
+    }
+
+    .stats-btn {
+      color: var(--info);
+    }
+
+    .stats-btn:hover {
+      color: var(--primary-color);
+    }
+
+    /* Tab Styles */
+    .tabs-container {
+      margin-bottom: 20px;
+    }
+
+    .tabs-header {
+      display: flex;
+      border-bottom: 2px solid var(--gray-light);
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 12px 20px;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-weight: 600;
+      color: var(--gray-dark);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover {
+      color: var(--primary-color);
+    }
+
+    .tab-btn.active {
+      color: var(--primary-color);
+      border-bottom: 3px solid var(--primary-color);
+    }
+
+    .tab-btn i {
+      font-size: 1rem;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.5s;
+    }
+
+    /* Admin Dashboard */
+    .admin-dashboard {
+      background: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--box-shadow);
+    }
+
+    .admin-dashboard h3 {
+      margin: 20px 0 15px;
+      color: var(--dark-bg);
+      border-bottom: 1px solid var(--gray-light);
+      padding-bottom: 10px;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .admin-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    /* Add these to your existing styles */
+    .delete-btn {
+      color: var(--danger);
+    }
+
+    .delete-btn:hover {
+      color: var(--danger);
+      opacity: 0.8;
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #bc2b38;
+      transform: translateY(-2px);
+    }
+
+    .modal-url-info {
+      background-color: var(--gray-light);
+      border-radius: var(--radius);
+      padding: 10px;
+      margin: 15px 0;
+      word-break: break-all;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      gap: 10px;
+    }
+
+    .modal-actions .btn {
+      flex: 1;
+    }
+
+    .delete-animation {
+      animation: fadeOut 0.5s forwards;
+    }
+
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+        transform: scale(1);
       }
 
-      /* Animations */
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
+      to {
+        opacity: 0;
+        transform: scale(0.9);
+        height: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
       }
+    }
 
-      @keyframes fadeInDown {
-        from {
-          opacity: 0;
-          transform: translateY(-20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+    /* Add these for notifications */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      background-color: white;
+      border-left: 4px solid;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateX(120%);
+      transition: transform 0.3s ease;
+      z-index: 2000;
+    }
 
-      @keyframes fadeInUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+    .notification.show {
+      transform: translateX(0);
+    }
 
-      @keyframes slideUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+    .notification.success {
+      border-left-color: var(--success);
+    }
 
-      @keyframes shake {
-        0%,
-        100% {
-          transform: translateX(0);
-        }
-        10%,
-        30%,
-        50%,
-        70%,
-        90% {
-          transform: translateX(-5px);
-        }
-        20%,
-        40%,
-        60%,
-        80% {
-          transform: translateX(5px);
-        }
-      }
+    .notification.error {
+      border-left-color: var(--danger);
+    }
 
-      /* Responsive adjustments */
-      @media (max-width: 768px) {
-        .hero-section {
-          padding: 40px 0;
-        }
+    .notification.success i {
+      color: var(--success);
+    }
 
-        .hero-section h1 {
-          font-size: 2rem;
-        }
+    .notification.error i {
+      color: var(--danger);
+    }
+  </style>
+</head>
 
-        .table-controls {
-          flex-direction: column;
-          align-items: flex-start;
-        }
-
-        .search-box {
-          max-width: 100%;
-        }
-
-        .footer .container {
-          flex-direction: column;
-          text-align: center;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <nav class="navbar">
-      <div class="logo">
-        <i class="fas fa-link"></i>
-        <span>LinkShrink</span>
-      </div>
-      <div class="user-info">
-        <% if (locals.user) { %>
+<body>
+  <nav class="navbar">
+    <div class="logo">
+      <i class="fas fa-link"></i>
+      <span>LinkShrink</span>
+    </div>
+    <div class="user-info">
+      <% if (locals.user) { %>
         <span>Welcome, <%= user.email %></span>
         <a href="/user/logout" class="btn btn-outline">Logout</a>
         <% } %>
-      </div>
-    </nav>
+    </div>
+  </nav>
 
-    <div class="hero-section">
-      <div class="container">
-        <h1>Simplify Your Links</h1>
-        <p>Create short, memorable links in seconds</p>
+  <div class="hero-section">
+    <div class="container">
+      <h1>Simplify Your Links</h1>
+      <p>Create short, memorable links in seconds</p>
 
-        <div class="url-form">
-          <form method="POST" action="/url" id="shortener-form">
-            <div class="input-group">
-              <i class="fas fa-globe input-icon"></i>
-              <input
-                type="url"
-                name="url"
-                id="url-input"
-                placeholder="Paste your long URL here"
-                required
-              />
-            </div>
+      <div class="url-form">
+        <form method="POST" action="/url" id="shortener-form">
+          <div class="input-group">
+            <i class="fas fa-globe input-icon"></i>
+            <input type="url" name="url" id="url-input" placeholder="Paste your long URL here"
+              pattern="https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
+              title="Please enter a valid URL (e.g. https://example.com)" required autocomplete="off"
+              aria-label="URL to shorten" />
+          </div>
+          <div class="button-group">
+            <button type="button" class="btn btn-outline" id="toggle-custom-url">
+              <i class="fas fa-cog"></i> Options
+            </button>
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-cut"></i> Shorten URL
             </button>
-          </form>
-        </div>
+          </div>
+          <!-- Custom URL option (hidden by default) -->
+          <div class="custom-url-group">
+            <div class="input-group">
+              <i class="fas fa-magic input-icon"></i>
+              <input type="text" name="customId" id="custom-url-input" placeholder="Custom alias (optional)"
+                pattern="[a-zA-Z0-9-_]+" title="Only letters, numbers, hyphens and underscores" maxlength="20"
+                aria-label="Custom URL alias" />
+            </div>
+          </div>
+        </form>
+      </div>
 
-        <% if (locals.id) { %>
+      <% if (locals.id) { %>
         <div class="result-card" id="result-container">
           <h3>Your shortened URL</h3>
           <div class="shortened-url">
-            <span id="short-url">http://localhost:3000/url/<%= id %></span>
-            <button
-              class="btn btn-copy"
-              id="copy-btn"
-              data-url="http://localhost:3000/url/<%= id %>"
-            >
+            <span id="short-url">
+              <%= locals.baseUrl || 'http://localhost:3000' %>/url/<%= url.shortId %>
+            </span>
+            <button class="btn btn-copy" id="copy-btn"
+              data-url="<%= locals.baseUrl || 'http://localhost:3000' %>/url/<%= url.shortId %>"
+              aria-label="Copy to clipboard">
               <i class="fas fa-copy"></i>
             </button>
           </div>
           <div class="qr-container" id="qr-code"></div>
+          <% if (locals.message) { %>
+            <div class="alert alert-success">
+              <%= message %>
+            </div>
+            <% } %>
         </div>
         <% } %>
-      </div>
+          <% if (locals.error) { %>
+            <div class="alert alert-danger">
+              <%= error %>
+            </div>
+            <% } %>
     </div>
+  </div>
 
-
-    <div class="stats-section">
-      <div class="container">
-        <h2>Your URLs</h2>
-        <div class="stats-container">
-          <div class="stats-card">
-            <i class="fas fa-link stats-icon"></i>
-            <h3><%= typeof urls !== 'undefined' ? urls.length : 0 %></h3>
-            <p>Total URLs</p>
-          </div>
-          <div class="stats-card">
-            <i class="fas fa-mouse-pointer stats-icon"></i>
-            <h3>
-              <%= typeof urls !== 'undefined' ? urls.reduce((sum, url) => sum +
+  <div class="stats-section">
+    <div class="container">
+      <h2>Your URLs</h2>
+      <div class="stats-container">
+        <div class="stats-card">
+          <i class="fas fa-link stats-icon"></i>
+          <h3>
+            <%= typeof urls !=='undefined' ? urls.length : 0 %>
+          </h3>
+          <p>Total URLs</p>
+        </div>
+        <div class="stats-card">
+          <i class="fas fa-mouse-pointer stats-icon"></i>
+          <h3>
+            <%= typeof urls !=='undefined' ? urls.reduce((sum, url)=> sum +
               url.visitHistory.length, 0) : 0 %>
-            </h3>
-            <p>Total Clicks</p>
-          </div>
+          </h3>
+          <p>Total Clicks</p>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="urls-section">
+  <!-- <div class="urls-section">
       <div class="container">
+
         <div class="table-controls">
           <div class="search-box">
             <i class="fas fa-search"></i>
-            <input type="text" id="url-search" placeholder="Search URLs..." />
+            <input
+              type="text"
+              id="url-search"
+              placeholder="Search URLs..."
+              aria-label="Search URLs"
+            />
           </div>
           <div class="view-toggle">
-            <button class="toggle-btn active" data-view="table">
+            <button
+              class="toggle-btn active"
+              data-view="table"
+              aria-label="Table view"
+            >
               <i class="fas fa-table"></i>
             </button>
-            <button class="toggle-btn" data-view="cards">
+            <button
+              class="toggle-btn"
+              data-view="cards"
+              aria-label="Cards view"
+            >
               <i class="fas fa-th-large"></i>
             </button>
           </div>
@@ -800,13 +1100,21 @@
               </tr>
             </thead>
             <tbody>
-              <% urls.forEach((url, index) => { %>
+              <% if (typeof urls !== 'undefined' && urls.length > 0) { %> <%
+              urls.forEach((url, index) => { %>
               <tr data-url="<%= url.redirectUrl %>">
                 <td><%= index + 1 %></td>
                 <td class="short-id"><%= url.shortId %></td>
                 <td class="redirect-url">
-                  <%= url.redirectUrl.substring(0, 50) %><%=
-                  url.redirectUrl.length > 50 ? '...' : '' %>
+                  <a
+                    href="<%= url.redirectUrl %>"
+                    target="_blank"
+                    title="<%= url.redirectUrl %>"
+                    class="original-url"
+                  >
+                    <%= url.redirectUrl.substring(0, 50) %><%=
+                    url.redirectUrl.length > 50 ? '...' : '' %>
+                  </a>
                 </td>
                 <td>
                   <span class="click-count"
@@ -819,26 +1127,45 @@
                 <td class="actions">
                   <button
                     class="action-btn copy-btn"
-                    data-url="http://localhost:3000/url/<%= url.shortId %>"
+                    data-url="<%= locals.baseUrl || 'http://localhost:3000' %>/url/<%= url.shortId %>"
+                    aria-label="Copy URL"
+                    title="Copy URL"
                   >
                     <i class="fas fa-copy"></i>
                   </button>
                   <button
                     class="action-btn qr-btn"
-                    data-url="http://localhost:3000/url/<%= url.shortId %>"
+                    data-url="<%= locals.baseUrl || 'http://localhost:3000' %>/url/<%= url.shortId %>"
+                    aria-label="Generate QR code"
+                    title="Generate QR code"
                   >
                     <i class="fas fa-qrcode"></i>
                   </button>
+                  <a
+                    href="/url/analytics/<%= url.shortId %>"
+                    class="action-btn stats-btn"
+                    aria-label="View analytics"
+                    title="View analytics"
+                  >
+                    <i class="fas fa-chart-bar"></i>
+                  </a>
                 </td>
               </tr>
-              <% }) %>
+              <% }) %> <% } else { %>
+              <tr>
+                <td colspan="<%= locals.isAdmin ? 6 : 5 %>" class="empty-state">
+                  No URLs created yet. Shorten your first URL above!
+                </td>
+              </tr>
+              <% } %>
             </tbody>
           </table>
         </div>
 
         <div class="cards-view" id="cards-view">
           <div class="url-cards">
-            <% urls.forEach((url, index) => { %>
+            <% if (typeof urls !== 'undefined' && urls.length > 0) { %> <%
+            urls.forEach((url, index) => { %>
             <div class="url-card" data-url="<%= url.redirectUrl %>">
               <div class="card-header">
                 <span class="short-id-label">Short ID:</span>
@@ -869,103 +1196,515 @@
               <div class="card-footer">
                 <button
                   class="action-btn copy-btn"
-                  data-url="http://localhost:3000/url/<%= url.shortId %>"
+                  data-url="<%= locals.baseUrl || 'http://localhost:3000' %>/url/<%= url.shortId %>"
+                  aria-label="Copy URL"
+                  title="Copy URL"
                 >
                   <i class="fas fa-copy"></i> Copy
                 </button>
                 <button
                   class="action-btn qr-btn"
-                  data-url="http://localhost:3000/url/<%= url.shortId %>"
+                  data-url="<%= locals.baseUrl || 'http://localhost:3000' %>/url/<%= url.shortId %>"
+                  aria-label="Generate QR code"
+                  title="Generate QR code"
                 >
                   <i class="fas fa-qrcode"></i> QR
                 </button>
                 <a
-                  href="http://localhost:3000/url/<%= url.shortId %>"
+                  href="<%= locals.baseUrl || 'http://localhost:3000' %>/url/<%= url.shortId %>"
                   target="_blank"
                   class="action-btn visit-btn"
+                  aria-label="Visit shortened URL"
+                  title="Visit shortened URL"
                 >
                   <i class="fas fa-external-link-alt"></i> Visit
                 </a>
               </div>
             </div>
-            <% }) %>
+            <% }) %> <% } else { %>
+            <div
+              class="empty-state"
+              style="grid-column: 1/-1; padding: 30px; text-align: center"
+            >
+              No URLs created yet. Shorten your first URL above!
+            </div>
+            <% } %>
           </div>
         </div>
       </div>
     </div>
+  -->
+  <!-- Add this right after the stats-section, at the beginning of the urls-section -->
+  <div class="urls-section">
+    <div class="container">
+      <!-- Tab Navigation -->
+      <div class="tabs-container">
+        <div class="tabs-header">
+          <button class="tab-btn active" data-tab="all-urls">
+            <i class="fas fa-link"></i> All URLs
+          </button>
+          <button class="tab-btn" data-tab="recent-urls">
+            <i class="fas fa-clock"></i> Recent
+          </button>
+          <button class="tab-btn" data-tab="popular-urls">
+            <i class="fas fa-fire"></i> Popular
+          </button>
+          <% if (locals.isAdmin) { %>
+            <button class="tab-btn" data-tab="admin-panel">
+              <i class="fas fa-user-shield"></i> Admin
+            </button>
+            <% } %>
+        </div>
 
-    <div class="modal" id="qr-modal">
-      <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <h3>QR Code</h3>
-        <div id="modal-qr-code"></div>
-        <p id="modal-url"></p>
-        <button class="btn btn-primary" id="download-qr">
-          Download QR Code
-        </button>
+        <!-- Search and View Toggle -->
+        <div class="table-controls">
+          <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="url-search" placeholder="Search URLs..." aria-label="Search URLs" />
+          </div>
+          <div class="view-toggle">
+            <button class="toggle-btn active" data-view="table" aria-label="Table view">
+              <i class="fas fa-table"></i>
+            </button>
+            <button class="toggle-btn" data-view="cards" aria-label="Cards view">
+              <i class="fas fa-th-large"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content -->
+      <!-- All URLs Tab -->
+      <div class="tab-content active" id="all-urls-content">
+        <!-- Your existing table and card views for all URLs -->
+        <div class="table-view active" id="table-view">
+          <table id="urls-table">
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Short ID</th>
+                <th>Original URL</th>
+                <th>Clicks</th>
+                <% if (locals.isAdmin) { %>
+                  <th>User Email</th>
+                  <% } %>
+                    <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (typeof urls !=='undefined' && urls.length> 0) { %> <% urls.forEach((url, index)=> { %>
+                  <tr data-url="<%= url.redirectUrl %>">
+                    <td>
+                      <%= index + 1 %>
+                    </td>
+                    <td class="short-id">
+                      <%= url.shortId %>
+                    </td>
+                    <td class="redirect-url">
+                      <a href="<%= url.redirectUrl %>" target="_blank" title="<%= url.redirectUrl %>"
+                        class="original-url">
+                        <%= url.redirectUrl.substring(0, 50) %>
+                          <%= url.redirectUrl.length> 50 ? '...' : '' %>
+                      </a>
+                    </td>
+                    <td>
+                      <span class="click-count">
+                        <%= url.visitHistory.length %>
+                      </span>
+                    </td>
+                    <% if (locals.isAdmin) { %>
+                      <td>
+                        <%= url.createdBy ? url.createdBy.email : 'No email' %>
+                      </td>
+                      <% } %>
+                        <td class="actions">
+                          <button class="action-btn copy-btn"
+                            data-url="<%= locals.baseUrl || 'http://localhost:3000' %>/url/<%= url.shortId %>"
+                            aria-label="Copy URL" title="Copy URL">
+                            <i class="fas fa-copy"></i>
+                          </button>
+                          <button class="action-btn qr-btn"
+                            data-url="<%= locals.baseUrl || 'http://localhost:3000' %>/url/<%= url.shortId %>"
+                            aria-label="Generate QR code" title="Generate QR code">
+                            <i class="fas fa-qrcode"></i>
+                          </button>
+                          <a href="/url/analytics/<%= url.shortId %>" class="action-btn stats-btn"
+                            aria-label="View analytics" title="View analytics">
+                            <i class="fas fa-chart-bar"></i>
+                          </a>
+                          <!-- New delete button -->
+                          <a class="action-btn delete-btn" data-id="<%= url.shortId %>" aria-label="Delete URL"
+                            title="Delete URL">
+                            <i class="fas fa-trash"></i>
+                          </a>
+                        </td>
+                  </tr>
+                  <% }) %>
+                    <% } else { %>
+                      <tr>
+                        <td colspan="<%= locals.isAdmin ? 6 : 5 %>" class="empty-state">
+                          No URLs created yet. Shorten your first URL above!
+                        </td>
+                      </tr>
+                      <% } %>
+            </tbody>
+          </table>
+        </div>
+        <div class="cards-view" id="cards-view">
+          <!-- Cards content... -->
+          <div class="url-cards">
+            <% if (typeof urls !=='undefined' && urls.length> 0) { %> <% urls.forEach((url, index)=> { %>
+                <div class="url-card" data-url="<%= url.redirectUrl %>">
+                  <div class="card-header">
+                    <span class="short-id-label">Short ID:</span>
+                    <span class="short-id">
+                      <%= url.shortId %>
+                    </span>
+                  </div>
+                  <div class="card-body">
+                    <p class="redirect-url" title="<%= url.redirectUrl %>">
+                      <%= url.redirectUrl.substring(0, 60) %>
+                        <%= url.redirectUrl.length> 60 ? '...' : '' %>
+                    </p>
+                    <div class="click-info">
+                      <i class="fas fa-mouse-pointer"></i>
+                      <span class="click-count">
+                        <%= url.visitHistory.length %>
+                      </span>
+                      clicks
+                    </div>
+                    <% if (locals.isAdmin) { %>
+                      <div class="user-info">
+                        <i class="fas fa-user"></i>
+                        <span>
+                          <%= url.createdBy ? url.createdBy.email : 'No email' %>
+                        </span>
+                      </div>
+                      <% } %>
+                  </div>
+                  <div class="card-footer">
+                    <button class="action-btn copy-btn"
+                      data-url="<%= locals.baseUrl || 'http://localhost:3000' %>/url/<%= url.shortId %>"
+                      aria-label="Copy URL" title="Copy URL">
+                      <i class="fas fa-copy"></i> Copy
+                    </button>
+                    <button class="action-btn qr-btn"
+                      data-url="<%= locals.baseUrl || 'http://localhost:3000' %>/url/<%= url.shortId %>"
+                      aria-label="Generate QR code" title="Generate QR code">
+                      <i class="fas fa-qrcode"></i> QR
+                    </button>
+                    <a href="<%= locals.baseUrl || 'http://localhost:3000' %>/url/<%= url.shortId %>" target="_blank"
+                      class="action-btn visit-btn" aria-label="Visit shortened URL" title="Visit shortened URL">
+                      <i class="fas fa-external-link-alt"></i> Visit
+                    </a>
+                  </div>
+                </div>
+                <% }) %>
+                  <% } else { %>
+                    <div class="empty-state" style="grid-column: 1/-1; padding: 30px; text-align: center">
+                      No URLs created yet. Shorten your first URL above!
+                    </div>
+                    <% } %>
+          </div>
+        </div>
+      </div> <!-- Closing the container div -->
+    </div>
+
+    <!-- Recent URLs Tab -->
+    <div class="tab-content" id="recent-urls-content">
+      <div class="table-view active">
+        <!-- Similar table but with recently created URLs only -->
+        <table>
+          <!-- Table content with filtered URLs (last 7 days) -->
+        </table>
+      </div>
+      <div class="cards-view">
+        <!-- Cards for recent URLs -->
       </div>
     </div>
 
-    <footer class="footer">
-      <div class="container">
-        <p>
-          &copy; <%= new Date().getFullYear() %> LinkShrink. All rights
-          reserved.
-        </p>
-        <p>Current date: <%= new Date().toISOString().split('T')[0] %></p>
+    <!-- Popular URLs Tab -->
+    <div class="tab-content" id="popular-urls-content">
+      <div class="table-view active">
+        <!-- Similar table but sorted by click count -->
+        <table>
+          <!-- Table content with most clicked URLs -->
+        </table>
       </div>
-    </footer>
+      <div class="cards-view">
+        <!-- Cards for popular URLs -->
+      </div>
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // Form submission feedback
-        const form = document.getElementById("shortener-form");
-        const urlInput = document.getElementById("url-input");
+    <% if (locals.isAdmin) { %>
+      <!-- Admin Panel Tab -->
+      <div class="tab-content" id="admin-panel-content">
+        <div class="admin-dashboard">
+          <h3>User Management</h3>
+          <div class="admin-grid">
+            <!-- User management tools -->
+          </div>
 
+          <h3>URL Management</h3>
+          <div class="admin-actions">
+            <!-- Bulk URL actions -->
+          </div>
+        </div>
+      </div>
+      <% } %>
+  </div>
+  </div>
+
+  <div class="modal" id="qr-modal">
+    <div class="modal-content">
+      <span class="close-btn" aria-label="Close">&times;</span>
+      <h3>QR Code</h3>
+      <div id="modal-qr-code"></div>
+      <p id="modal-url"></p>
+      <button class="btn btn-primary" id="download-qr">
+        <i class="fas fa-download"></i> Download QR Code
+      </button>
+    </div>
+  </div>
+
+  <!-- Add delete modal here -->
+  <div class="modal" id="delete-modal">
+    <div class="modal-content">
+      <span class="close-btn" aria-label="Close">&times;</span>
+      <h3>Delete URL</h3>
+      <p>Are you sure you want to delete this URL?</p>
+      <div class="modal-url-info">
+        <p id="delete-modal-shortid"></p>
+        <p id="delete-modal-url"></p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn" id="cancel-delete">Cancel</button>
+        <button class="btn btn-danger" id="confirm-delete">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>
+        &copy; <%= new Date().getFullYear() %> LinkShrink. All rights
+          reserved.
+      </p>
+      <p>Current date: <%= new Date().toISOString().split('T')[0] %>
+      </p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Form submission and validation
+      const form = document.getElementById("shortener-form");
+      const urlInput = document.getElementById("url-input");
+      const customUrlInput = document.getElementById("custom-url-input");
+      const toggleCustomUrl = document.getElementById("toggle-custom-url");
+      const customUrlGroup = document.querySelector(".custom-url-group");
+
+      // Toggle custom URL field
+      if (toggleCustomUrl) {
+        toggleCustomUrl.addEventListener("click", function () {
+          customUrlGroup.style.display =
+            customUrlGroup.style.display === "none" ? "block" : "none";
+          this.innerHTML =
+            customUrlGroup.style.display === "none"
+              ? '<i class="fas fa-cog"></i> Options'
+              : '<i class="fas fa-times"></i> Hide Options';
+        });
+      }
+
+      // URL validation and auto-protocol addition
+      if (urlInput) {
+        urlInput.addEventListener("blur", function () {
+          let url = this.value.trim();
+          if (url && !url.match(/^https?:\/\//i)) {
+            this.value = "https://" + url;
+          }
+        });
+      }
+
+      // Form submission handling
+      if (form) {
         form.addEventListener("submit", function (e) {
           if (urlInput.value.trim() === "") {
             e.preventDefault();
-            urlInput.classList.add("error");
-            setTimeout(() => {
-              urlInput.classList.remove("error");
-            }, 3000);
+            showFormError(urlInput, "Please enter a valid URL");
+          } else if (
+            customUrlInput &&
+            customUrlInput.value &&
+            !validateCustomId(customUrlInput.value)
+          ) {
+            e.preventDefault();
+            showFormError(
+              customUrlInput,
+              "Custom alias can only contain letters, numbers, hyphens and underscores"
+            );
           } else {
             const submitBtn = this.querySelector('button[type="submit"]');
             submitBtn.innerHTML =
               '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            submitBtn.disabled = true;
           }
         });
+      }
 
-        // Copy functionality
-        const copyButtons = document.querySelectorAll(".copy-btn");
-        copyButtons.forEach((btn) => {
-          btn.addEventListener("click", function () {
-            const url = this.getAttribute("data-url");
-            navigator.clipboard.writeText(url).then(() => {
+      // Improved URL validation
+      function validateUrl(url) {
+        if (!url) return false;
+        try {
+          new URL(url);
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+
+      function validateCustomId(id) {
+        return /^[a-zA-Z0-9-_]+$/.test(id);
+      }
+
+      function showFormError(element, message) {
+        element.classList.add("error");
+
+        // Create or update error message
+        let errorMsg = element.parentNode.querySelector(".error-message");
+        if (!errorMsg) {
+          errorMsg = document.createElement("div");
+          errorMsg.className = "error-message";
+          element.parentNode.appendChild(errorMsg);
+        }
+        errorMsg.textContent = message;
+        errorMsg.style.display = "block";
+
+        setTimeout(() => {
+          element.classList.remove("error");
+          errorMsg.style.display = "none";
+        }, 3000);
+      }
+
+      // Copy functionality
+      const copyButtons = document.querySelectorAll(".copy-btn");
+      copyButtons.forEach((btn) => {
+        btn.addEventListener("click", function () {
+          const url = this.getAttribute("data-url");
+          navigator.clipboard
+            .writeText(url)
+            .then(() => {
               // Show copied notification
               const originalHtml = this.innerHTML;
               this.innerHTML = '<i class="fas fa-check"></i>';
               this.classList.add("copied");
 
+              // Accessibility notification
+              const notification = document.createElement("div");
+              notification.className = "sr-only-announcement";
+              notification.setAttribute("aria-live", "assertive");
+              notification.textContent = "URL copied to clipboard";
+              document.body.appendChild(notification);
+
               setTimeout(() => {
                 this.innerHTML = originalHtml;
                 this.classList.remove("copied");
+                document.body.removeChild(notification);
               }, 2000);
+            })
+            .catch((err) => {
+              console.error("Could not copy text: ", err);
+              alert("Failed to copy URL. Please try again.");
             });
+        });
+      });
+
+      // URL search functionality
+      const searchInput = document.getElementById("url-search");
+      if (searchInput) {
+        searchInput.addEventListener("input", function () {
+          const searchTerm = this.value.toLowerCase();
+          const tableRows = document.querySelectorAll("#urls-table tbody tr");
+          const cards = document.querySelectorAll(".url-card");
+
+          // Filter table rows
+          tableRows.forEach((row) => {
+            const originalUrl = row.getAttribute("data-url").toLowerCase();
+            const shortId = row
+              .querySelector(".short-id")
+              .textContent.toLowerCase();
+            const isVisible =
+              originalUrl.includes(searchTerm) ||
+              shortId.includes(searchTerm);
+            row.style.display = isVisible ? "" : "none";
+          });
+
+          // Filter cards
+          cards.forEach((card) => {
+            const originalUrl = card.getAttribute("data-url").toLowerCase();
+            const shortId = card
+              .querySelector(".short-id")
+              .textContent.toLowerCase();
+            const isVisible =
+              originalUrl.includes(searchTerm) ||
+              shortId.includes(searchTerm);
+            card.style.display = isVisible ? "" : "none";
           });
         });
+      }
 
-        // QR code generation
-        const qrButtons = document.querySelectorAll(".qr-btn");
-        const modal = document.getElementById("qr-modal");
-        const closeBtn = document.querySelector(".close-btn");
-        const modalQr = document.getElementById("modal-qr-code");
-        const modalUrl = document.getElementById("modal-url");
-        const downloadQrBtn = document.getElementById("download-qr");
+      // View toggle functionality
+      const toggleBtns = document.querySelectorAll(".toggle-btn");
+      toggleBtns.forEach((btn) => {
+        btn.addEventListener("click", function () {
+          const view = this.getAttribute("data-view");
 
-        qrButtons.forEach((btn) => {
-          btn.addEventListener("click", function () {
+          // Update active button
+          toggleBtns.forEach((b) => b.classList.remove("active"));
+          this.classList.add("active");
+
+          // Show selected view
+          document
+            .querySelector(".table-view")
+            .classList.toggle("active", view === "table");
+          document
+            .querySelector(".cards-view")
+            .classList.toggle("active", view === "cards");
+        });
+      });
+
+
+      // QR code generation
+      const qrButtons = document.querySelectorAll(".qr-btn");
+      const modal = document.getElementById("qr-modal");
+      const closeBtn = document.querySelector(".close-btn");
+      const modalQr = document.getElementById("modal-qr-code");
+      const modalUrl = document.getElementById("modal-url");
+      const downloadQrBtn = document.getElementById("download-qr");
+
+      // Generate QR code on page load if result card exists
+      const qrContainer = document.getElementById("qr-code");
+      const shortUrlSpan = document.getElementById("short-url");
+      if (qrContainer && shortUrlSpan && window.QRCode) {
+        try {
+          const shortUrl = shortUrlSpan.textContent;
+          new QRCode(qrContainer, {
+            text: shortUrl,
+            width: 128,
+            height: 128,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H,
+          });
+        } catch (error) {
+          console.error("Error generating QR code:", error);
+        }
+      }
+
+      // QR modal functionality
+      qrButtons.forEach((btn) => {
+        btn.addEventListener("click", function () {
+          try {
             const url = this.getAttribute("data-url");
             modalQr.innerHTML = "";
             modalUrl.textContent = url;
@@ -981,10 +1720,15 @@
             });
 
             modal.style.display = "flex";
-          });
+          } catch (error) {
+            console.error("QR generation error:", error);
+            alert("Could not generate QR code. Please try again.");
+          }
         });
+      });
 
-        // Close modal
+      // Close modal
+      if (closeBtn) {
         closeBtn.addEventListener("click", function () {
           modal.style.display = "none";
         });
@@ -995,118 +1739,271 @@
           }
         });
 
-        // Download QR code
-        downloadQrBtn.addEventListener("click", function () {
-          const qrImg = modalQr.querySelector("img");
-          const link = document.createElement("a");
-          link.href = qrImg.src;
-          link.download = "qrcode.png";
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+        // Escape key to close modal
+        window.addEventListener("keydown", function (event) {
+          if (event.key === "Escape" && modal.style.display === "flex") {
+            modal.style.display = "none";
+          }
         });
+      }
+      // Add this to your existing JavaScript
+      // Delete functionality
+      const deleteButtons = document.querySelectorAll(".delete-btn");
+      const deleteModal = document.getElementById("delete-modal");
+      const cancelDeleteBtn = document.getElementById("cancel-delete");
+      const confirmDeleteBtn = document.getElementById("confirm-delete");
+      const deleteModalShortId = document.getElementById("delete-modal-shortid");
+      const deleteModalUrl = document.getElementById("delete-modal-url");
+      let currentDeleteId = null;
+      let currentDeleteElement = null;
 
-        // View toggle functionality
-        const toggleBtns = document.querySelectorAll(".toggle-btn");
-        const tableView = document.getElementById("table-view");
-        const cardsView = document.getElementById("cards-view");
+      // Show delete confirmation modal when delete button is clicked
+      deleteButtons.forEach(btn => {
+        btn.addEventListener("click", function () {
+          const shortId = this.getAttribute("data-id");
+          const url = this.closest("tr")?.dataset.url ||
+            this.closest(".url-card")?.dataset.url ||
+            "Unknown URL";
+          currentDeleteId = shortId;
+          currentDeleteElement = this.closest("tr") || this.closest(".url-card");
 
-        toggleBtns.forEach((btn) => {
-          btn.addEventListener("click", function () {
-            toggleBtns.forEach((b) => b.classList.remove("active"));
-            this.classList.add("active");
+          // Find the URL this delete button corresponds to
+          // let urlElement;
+          // if (this.closest("tr")) {
+          //   // Table view
+          //   urlElement = this.closest("tr");
+          //   currentDeleteElement = urlElement;
+          // } else if (this.closest(".url-card")) {
+          //   // Card view
+          //   urlElement = this.closest(".url-card");
+          //   currentDeleteElement = urlElement;
+          // }
 
-            const view = this.getAttribute("data-view");
-            if (view === "table") {
-              tableView.classList.add("active");
-              cardsView.classList.remove("active");
-            } else {
-              cardsView.classList.add("active");
-              tableView.classList.remove("active");
-            }
-          });
-        });
 
-        // URL search functionality
-        const searchInput = document.getElementById("url-search");
-        const tableRows = document.querySelectorAll("#urls-table tbody tr");
-        const urlCards = document.querySelectorAll(".url-card");
+          // // Get URL data
+          // if (urlElement) {
+          //   const originalUrl = urlElement.getAttribute("data-url") || "URL not found";
+          //   deleteModalShortId.textContent = `Short ID: ${shortId}`;
+          //   deleteModalUrl.textContent = originalUrl;
 
-        searchInput.addEventListener("input", function () {
-          const query = this.value.toLowerCase();
+          //   // Show the modal
+          //   deleteModal.style.display = "flex";
+          // }
 
-          // Search in table
-          tableRows.forEach((row) => {
-            const shortId = row
-              .querySelector(".short-id")
-              .textContent.toLowerCase();
-            const redirectUrl = row
-              .querySelector(".redirect-url")
-              .textContent.toLowerCase();
 
-            if (shortId.includes(query) || redirectUrl.includes(query)) {
-              row.style.display = "";
-            } else {
-              row.style.display = "none";
-            }
-          });
+          // Update modal with URL details
+          deleteModalShortId.textContent = `Short ID: ${shortId}`;
+          deleteModalUrl.textContent = `URL: ${url.substring(0, 50)}${url.length > 50 ? '...' : ''}`;
 
-          // Search in cards
-          urlCards.forEach((card) => {
-            const shortId = card
-              .querySelector(".short-id")
-              .textContent.toLowerCase();
-            const redirectUrl = card
-              .querySelector(".redirect-url")
-              .textContent.toLowerCase();
-
-            if (shortId.includes(query) || redirectUrl.includes(query)) {
-              card.style.display = "";
-            } else {
-              card.style.display = "none";
-            }
-          });
-        });
-
-        // Generate QR for the latest shortened URL if exists
-        const resultContainer = document.getElementById("result-container");
-        const qrContainer = document.getElementById("qr-code");
-
-        if (resultContainer && qrContainer) {
-          const shortUrl = document.getElementById("short-url").textContent;
-          new QRCode(qrContainer, {
-            text: shortUrl,
-            width: 120,
-            height: 120,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.H,
-          });
-        }
-
-        // Highlight effect when clicking on rows or cards
-        tableRows.forEach((row) => {
-          row.addEventListener("click", function (e) {
-            if (!e.target.closest(".action-btn")) {
-              this.classList.add("highlight");
-              setTimeout(() => {
-                this.classList.remove("highlight");
-              }, 1000);
-            }
-          });
-        });
-
-        urlCards.forEach((card) => {
-          card.addEventListener("click", function (e) {
-            if (!e.target.closest(".action-btn") && !e.target.closest("a")) {
-              this.classList.add("highlight");
-              setTimeout(() => {
-                this.classList.remove("highlight");
-              }, 1000);
-            }
-          });
+          // Show modal
+          deleteModal.style.display = "block";
         });
       });
-    </script>
-  </body>
+
+      // Cancel delete action
+      cancelDeleteBtn.addEventListener("click", function () {
+        deleteModal.style.display = "none";
+        currentDeleteId = null;
+        currentDeleteElement = null;
+      });
+
+      // Close modal when clicking the X
+      const deleteModalCloseBtn = deleteModal.querySelector(".close-btn");
+      if (deleteModalCloseBtn) {
+        deleteModalCloseBtn.addEventListener("click", function () {
+          deleteModal.style.display = "none";
+          currentDeleteId = null;
+          currentDeleteElement = null;
+        });
+      }
+
+      // Close modal when clicking outside
+      window.addEventListener("click", function (event) {
+        if (event.target === deleteModal) {
+          deleteModal.style.display = "none";
+          currentDeleteId = null;
+          currentDeleteElement = null;
+        }
+      });
+
+      // Escape key to close delete modal
+      window.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && deleteModal.style.display === "flex") {
+          deleteModal.style.display = "none";
+          currentDeleteId = null;
+          currentDeleteElement = null;
+        }
+      });
+
+      // Confirm delete action
+      confirmDeleteBtn.addEventListener("click", async function () {
+        if (currentDeleteId) {
+          // Show loading state
+          this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+          this.disabled = true;
+          cancelDeleteBtn.disabled = true;
+
+          // Send delete request to server
+          try {
+            const response = await fetch(`/url/delete/${currentDeleteId}`, {
+              method: 'delete',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              // Add delete animation
+              currentDeleteElement.classList.add('delete-animation');
+
+              // Remove element after animation completes
+              setTimeout(() => {
+                currentDeleteElement.remove();
+
+                // Show notification
+                const notification = document.createElement('div');
+                notification.className = 'notification';
+                notification.textContent = 'URL deleted successfully';
+                document.body.appendChild(notification);
+
+                // Show the notification
+                setTimeout(() => notification.classList.add('show'), 10);
+
+                // Hide the notification after 3 seconds
+                setTimeout(() => {
+                  notification.classList.remove('show');
+                  setTimeout(() => notification.remove(), 300);
+                }, 3000);
+
+              }, 300);
+            } else {
+              alert(`Error: ${data.error}`);
+            }
+
+            // Close modal
+            deleteModal.style.display = "none";
+            currentDeleteId = null;
+            currentDeleteElement = null;
+          } catch (error) {
+            console.error("Error deleting URL:", error);
+            alert("An error occurred while deleting the URL. Please try again.");
+          }
+
+        }
+      });
+
+      // Helper function to show notifications
+      function showNotification(message, type = 'success') {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+      <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+      <span>${message}</span>
+    `;
+
+        // Add to document
+        document.body.appendChild(notification);
+
+        // Show with animation
+        setTimeout(() => {
+          notification.classList.add('show');
+        }, 10);
+
+        // Remove after delay
+        setTimeout(() => {
+          notification.classList.remove('show');
+          setTimeout(() => {
+            document.body.removeChild(notification);
+          }, 300); // Match transition duration
+        }, 3000);
+      };
+
+      // Add this to your existing JavaScript
+      // Tab functionality
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Remove active class from all buttons and contents
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          tabContents.forEach(content => content.classList.remove('active'));
+
+          // Add active class to current button and corresponding content
+          const tabName = button.getAttribute('data-tab');
+          button.classList.add('active');
+          document.getElementById(`${tabName}-content`).classList.add('active');
+
+          // Maintain the same view mode (table or card) across tabs
+          const isTableActive = document.querySelector('#table-view').classList.contains('active');
+          const tabTableView = document.querySelector(`#${tabName}-content .table-view`);
+          const tabCardView = document.querySelector(`#${tabName}-content .cards-view`);
+
+          if (tabTableView && tabCardView) {
+            tabTableView.classList.toggle('active', isTableActive);
+            tabCardView.classList.toggle('active', !isTableActive);
+          }
+        });
+      });
+
+      // Filter URLs for the Recent tab (last 7 days)
+      function filterRecentUrls(urls) {
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+        return urls.filter(url => {
+          const createdAt = new Date(url.createdAt);
+          return createdAt > oneWeekAgo;
+        });
+      }
+
+      // Filter URLs for the Popular tab (most clicks)
+      function sortPopularUrls(urls) {
+        return [...urls].sort((a, b) => b.visitHistory.length - a.visitHistory.length);
+      }
+
+      // Initialize the tabs with data
+      function initializeTabs(urls) {
+        if (!urls || !urls.length) return;
+
+        // Recent URLs
+        const recentUrls = filterRecentUrls(urls);
+        populateTabContent('recent-urls', recentUrls);
+
+        // Popular URLs
+        const popularUrls = sortPopularUrls(urls);
+        populateTabContent('popular-urls', popularUrls);
+      }
+
+      // Helper to populate tab content
+      function populateTabContent(tabId, urls) {
+        // Implementation depends on your data structure
+        // This would create either table rows or cards for the filtered URLs
+      }
+      // Download QR code
+      if (downloadQrBtn) {
+        downloadQrBtn.addEventListener("click", function () {
+          try {
+            const qrImg = modalQr.querySelector("img");
+            if (!qrImg) throw new Error("QR image not found");
+
+            const link = document.createElement("a");
+            link.href = qrImg.src;
+            link.download = "qrcode.png";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          } catch (error) {
+            console.error("QR download error:", error);
+            alert("Could not download QR code. Please try again.");
+          }
+        });
+      }
+    });
+  </script>
+</body>
+
 </html>

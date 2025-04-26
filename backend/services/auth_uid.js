@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const secret = "Mehul-2004@#$%";
+const secret = process.env.JWT_SECRET || "Mehul-2004@#$%"; // Use environment variable if available
 
 function setUser(user) {
   return jwt.sign(
@@ -8,7 +8,10 @@ function setUser(user) {
       email: user.email,
       role: user.role,
     },
-    secret
+    secret,
+    {
+      expiresIn: "24h", // Token expires in 24 hours
+    }
   );
 }
 
@@ -25,7 +28,14 @@ function getUser(token) {
       throw new Error("Invalid JWT format");
     }
 
-    return jwt.verify(token, secret);
+    const decoded = jwt.verify(token, secret);
+
+    // Check if token is expired
+    if (decoded.exp && decoded.exp < Date.now() / 1000) {
+      throw new Error("Token has expired");
+    }
+
+    return decoded;
   } catch (err) {
     console.error("JWT Verification Error:", err.message);
     return null; // Return null instead of throwing an error
