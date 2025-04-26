@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="/css/login.css" />
+    <!-- <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: vertical;
+      }
+      label {
+        padding: 12px 12px 12px 0;
+        display: inline-block;
+      }
+      button {
+        background-color: #04aa6d;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+      }
+
+      button:hover {
+        opacity: 1;
+      }
+
+      /* .container {
+        padding: 16px;
+      } */
+
+      .container {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+      }
+      .col-25 {
+        float: left;
+        width: 25%;
+        margin-top: 6px;
+      }
+
+      .col-75 {
+        float: left;
+        width: 75%;
+        margin-top: 6px;
+      }
+      /* Clear floats */
+      .clearfix::after {
+        content: "";
+        clear: both;
+        display: table;
+      }
+      hr {
+        border: 1px solid #f1f1f1;
+        margin-bottom: 25px;
+      }
+      .row::after {
+        content: "";
+        display: table;
+        clear: both;
+      }
+
+      .signupbtn {
+        padding: 14px 20px;
+        background-color: #f44336;
+      }
+
+      /* Float cancel and signup buttons and add an equal width */
+      .loginbtn,
+      .signupbtn {
+        float: left;
+        width: 50%;
+      }
+
+      /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+      @media screen and (max-width: 600px) {
+        .col-25,
+        .col-75 {
+          width: 100%;
+          margin-top: 0;
+        }
+      }
+      /* Change styles for cancel button and signup button on extra small screens */
+      @media screen and (max-width: 300px) {
+        .loginbtn,
+        .signupbtn {
+          width: 100%;
+        }
+      }
+    </style> -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+  </head>
+  <body>
+    <h1>Login</h1>
+    <form method="POST" action="/user/login">
+      <!-- <div class="container">
+        <label for="email"><b>Email:</b></label>
+        <input
+          type="text"
+          name="email"
+          placeholder="Enter your email"
+          required
+        />
+        <br />
+        <label for="password"><b>Password:</b> </label>
+        <input
+          type="password"
+          name="password"
+          placeholder="Enter your Password"
+          required
+        />
+        <br />
+      </div> -->
+
+      <div class="row">
+        <div class="col-25">
+          <label for="email"><b>Email</b></label>
+        </div>
+        <div class="col-75">
+          <input
+            type="text"
+            id="fname"
+            name="email"
+            placeholder="Your email.."
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-25">
+          <label for="lname"><b>Password</b></label>
+        </div>
+        <div class="col-75">
+          <input
+            type="password"
+            id="lname"
+            name="password"
+            placeholder="Your password .."
+          />
+        </div>
+      </div>
+
+      <!-- for clearfix button -->
+      <div class="clearfix">
+        <button type="submit" class="loginbtn">Login</button>
+      </div>
+
+      <!-- another css -->
+      <!-- <div class="row-right">
+        <input type="submit" value="Submit" />
+      </div>
+
+      <div class="row-left">
+        <input type="submit" value="Submit" />
+      </div> -->
+    </form>
+
+    <div class="clearfix">
+      <button onclick="window.location.href='/signup'" class="signupbtn">
+        Sign Up
+      </button>
+    </div>
+    <% if (locals.error) { %>
+    <script>
+      alert("<%= error %>");
+      window.location.href = "/login";
+    </script>
+    <% } %>
+  </body>
+</html>

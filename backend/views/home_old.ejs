@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="stylesheet" href="/css/home.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home page</title>
+  </head>
+  <body>
+    <% if (locals.id) { %>
+    <p>
+      Url generated: <%= id %>
+      <!-- <a href="http://localhost:3000/url/<%= id %>">
+        http://localhost:3000/url/<%= id %>
+      </a> -->
+    </p>
+    <% } %>
+
+    <div class="header">
+      <h1>Url Shortner</h1>
+    </div>
+
+    <div style="overflow-x: auto">
+      <form method="POST" action="/url">
+        <label for="url">Enter your url: </label>
+        <input type="text" name="url" placeholder="paste your url" />
+        <button type="submit">Shorten</button>
+      </form>
+      <br />
+    </div>
+
+    <div>
+      <table>
+        <thead>
+          <th>S.no</th>
+          <th>shortId</th>
+          <th>Redirect</th>
+          <th>Clicks</th>
+          <% if (isAdmin) { %>
+          <th>User Email</th>
+          <!-- Show email column only for admins -->
+          <% } %>
+        </thead>
+        <tbody>
+          <% urls.forEach((url, index) => { %>
+          <tr>
+            <td><%= index +1 %></td>
+            <td><%= url.shortId %></td>
+            <td><%= url.redirectUrl %></td>
+            <td><%= url.visitHistory.length %></td>
+            <% if (isAdmin) { %>
+            <td><%= url.createdBy ? url.createdBy.email : 'No email' %></td>
+            <!-- Show email if admin -->
+            <% } %>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>
