@@ -33,39 +33,60 @@ async function handlenewShortURL(req, res) {
     });
   }
 }
-
 async function handleRedirectUrl(req, res) {
-  const shortId = req.params.shortId;
-  const entry = await urlSchema.findOneAndUpdate(
-    {
-      shortId,
-    },
-    {
-      $push: {
-        visitHistory: {
-          timestamp: Date.now(),
+  try {
+    const { shortId } = req.params;
+
+    // Find the URL and track the visit
+    const entry = await urlSchema.findOneAndUpdate(
+      { shortId },
+      {
+        $push: {
+          visitHistory: {
+            timestamp: Date.now(),
+          },
         },
       },
-    },
-    { new: true }
-  );
+      { new: true } 
+    );
 
-  if (!entry) {
-    return res.status(404).send("Short URL not found");
+    if (!entry) {
+      return res.status(404).send("Short URL not found");
+    }
+
+    return res.redirect(entry.redirectUrl);
+  } catch (error) {
+    console.error("Error redirecting:", error);
+    return res.status(500).send("Server error");
   }
-  return res.redirect(entry.redirectUrl);
 }
 
 async function handleGetAnalytics(req, res) {
-  const shortId = req.params.shortId;
-  const result = await urlSchema.findOne({ shortId });
-  return res.status(200).json({
-    totolClicks: result.visitHistory.length,
-    Analytics: result.visitHistory,
-  });
+  try {
+    const { shortId } = req.params;
+    console.log(`Fetching analytics for shortId: ${shortId}`);
+
+    const result = await urlSchema.findOne({ shortId });
+
+    if (!result) {
+      return res.status(404).json({
+        error: "URL not found",
+      });
+    }
+
+    return res.status(200).json({
+      visitHistory: result.visitHistory || [],
+      createdAt: result.createdAt,
+      redirectUrl: result.redirectUrl,
+    });
+  } catch (error) {
+    console.error("Error in handleGetAnalytics:", error);
+    return res.status(500).json({
+      error: "An error occurred while fetching analytics",
+    });
+  }
 }
 
-// Add this function to your url_control.js file
 async function handleRemoveUrl(req, res) {
   try {
     const { shortId } = req.params;
@@ -100,9 +121,35 @@ async function handleRemoveUrl(req, res) {
   }
 }
 
+async function handleGetUrls(req, res) {
+  try {
+    const isAdmin = req.user && req.user.role === "ADMIN";
+    let urls;
+
+    if (isAdmin) {
+      // For admin, get all URLs with user information
+      urls = await urlSchema
+        .find({})
+        .populate("createdBy", "username email name");
+    } else {
+      // For normal users, get only their URLs
+      urls = await urlSchema.find({ createdBy: req.user._id });
+    }
+
+    return res.status(200).json(urls);
+  } catch (error) {
+    console.error("Error in handleGetUrls:", error);
+    return res.status(500).json({
+      success: false,
+      error: "An error occurred while fetching URLs",
+    });
+  }
+}
+
 module.exports = {
   handlenewShortURL,
   handleRedirectUrl,
   handleGetAnalytics,
   handleRemoveUrl,
+  handleGetUrls,
 };
