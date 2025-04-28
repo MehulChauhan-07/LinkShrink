@@ -1,10 +1,10 @@
 {
   "name": "LinkShrink_Backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon server.js"
   },
   "author": "Mehul",
   "license": "ISC",
@@ -16,7 +16,9 @@
     "dotenv": "^16.5.0",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
+    "http": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
+    "module-alias": "^2.2.3",
     "mongoose": "^8.10.1",
     "nanoid": "^5.1.0",
     "nodemon": "^3.1.9",

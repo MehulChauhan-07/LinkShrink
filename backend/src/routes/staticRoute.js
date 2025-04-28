@@ -4,7 +4,6 @@ const { restrictTo } = require("../middleware/auth");
 
 const router = express.Router();
 
-// Dashboard route
 // router.get("/admin/urls", restrictTo(["ADMIN"]), async (req, res) => {
 router.get("/dashboard", restrictTo(["NORMAL", "ADMIN"]), async (req, res) => {
   if (!req.user) {
@@ -47,12 +46,18 @@ router.get("/", restrictTo(["NORMAL", "ADMIN"]), async (req, res) => {
     urls = await URL.find({ createdBy: req.user._id });
   }
 
-  return res.render("home", {
+  return res.json({
     urls,
     user: req.user,
     isAdmin,
     baseUrl: req.protocol + "://" + req.get("host"),
   });
+  // return res.render("home", {
+  //   urls,
+  //   user: req.user,
+  //   isAdmin,
+  //   baseUrl: req.protocol + "://" + req.get("host"),
+  // });
 });
 
 router.get("/signup", (req, res) => {

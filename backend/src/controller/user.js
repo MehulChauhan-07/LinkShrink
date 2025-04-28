@@ -18,7 +18,10 @@ async function handleUserSignup(req, res) {
           error: "Username or email already exists",
         });
       }
-      return res.status(400).render("signup", {
+      // return res.status(400).render("signup", {
+      //   error: "Username or email already exists",
+      // });
+      return res.status(400).json({
         error: "Username or email already exists",
       });
     }
@@ -57,7 +60,10 @@ async function handleUserSignup(req, res) {
         error: "An error occurred during signup. Please try again.",
       });
     }
-    return res.status(400).render("signup", {
+    // return res.status(400).render("signup", {
+    //   error: "An error occurred during signup. Please try again.",
+    // });
+    return res.status(400).json({
       error: "An error occurred during signup. Please try again.",
     });
   }
@@ -78,7 +84,10 @@ async function handleUserlogin(req, res) {
           error: "Username/Email and password are required",
         });
       }
-      return res.status(400).render("login", {
+      // return res.status(400).render("login", {
+      //   error: "Username/Email and password are required",
+      // });
+      return res.status(400).json({
         error: "Username/Email and password are required",
       });
     }
@@ -101,9 +110,12 @@ async function handleUserlogin(req, res) {
           error: "Invalid credentials. Please try again.",
         });
       }
-      return res.status(400).render("login", {
+      return res.status(400).json({
         error: "Invalid credentials. Please try again.",
       });
+      // return res.status(400).render("login", {
+      //   error: "Invalid credentials. Please try again.",
+      // });
     }
 
     // Create token
@@ -131,7 +143,14 @@ async function handleUserlogin(req, res) {
       secure: process.env.NODE_ENV === "production",
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
-    return res.status(200).redirect("/");
+
+    return res.status(200).json({
+      success: true,
+      token,
+      message: "Login successful",
+      user: userResponse,
+    });
+    // return res.status(200).redirect("/");
   } catch (error) {
     console.error("Login Error:", error);
     if (req.headers.accept === "application/json") {
@@ -140,9 +159,12 @@ async function handleUserlogin(req, res) {
         error: "An error occurred. Please try again.",
       });
     }
-    return res.status(400).render("login", {
+    return res.status(400).json({
       error: "An error occurred. Please try again.",
     });
+    // return res.status(400).render("login", {
+    //   error: "An error occurred. Please try again.",
+    // });
   }
 }
 
