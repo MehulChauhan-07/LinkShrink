@@ -11,7 +11,7 @@ const api = axios.create({
   withCredentials: true, // Important for cookies
 });
 
-// Add a request interceptor to add the token to requests
+// Add request interceptor to add the token to requests
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -25,13 +25,23 @@ api.interceptors.request.use(
   }
 );
 
-// Add a response interceptor to handle token expiration
+// Add response interceptor to handle token expiration
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.log("API Error:", error);
+
     if (error.response?.status === 401) {
-      localStorage.removeItem("token");
-      window.location.href = "/login";
+      // Store the current path for redirection after login if it's a URL access
+      if (error.config.url.match(/\/[a-zA-Z0-9]{6,10}$/)) {
+        localStorage.setItem("redirectAfterLogin", error.config.url);
+      }
+
+      // Don't redirect automatically if you're trying to access a protected URL
+      if (!error.config.url.match(/\/[a-zA-Z0-9]{6,10}$/)) {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      }
     }
     return Promise.reject(error);
   }
@@ -60,13 +70,18 @@ export interface SignupResponse {
 export interface UrlResponse {
   shortId: string;
   redirectUrl: string;
-  visitHistory: { timestamp: string }[];
+  visitHistory: Array<{
+    timestamp: string;
+    userId?: string;
+    username?: string;
+  }>;
   createdAt: string;
   createdBy: {
     username: string;
     email: string;
     name: string;
   };
+  requiresAuth?: boolean;
 }
 
 export const authApi = {
@@ -106,32 +121,113 @@ export const authApi = {
 
 export const urlApi = {
   createShortUrl: async (url: string) => {
-    const response = await api.post<UrlResponse>("/url", { url });
-    return response.data;
+    try {
+      console.log("Creating short URL for:", url);
+      const response = await api.post("/url", { url });
+      console.log("Short URL created:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error creating URL:", error);
+      throw error;
+    }
   },
 
   getUrls: async () => {
-    const response = await api.get<UrlResponse[]>("/url");
-    return response.data;
+    try {
+      console.log("Fetching URLs...");
+      // Try both potential endpoints
+      try {
+        const response = await api.get<UrlResponse[]>("/url");
+        console.log("URLs fetched from /url:", response.data);
+        return response.data;
+      } catch (error) {
+        console.log("Failed to fetch from /url, trying /url/user-urls");
+        const response = await api.get<{ urls: UrlResponse[] }>(
+          "/url/user-urls"
+        );
+        console.log("URLs fetched from /url/user-urls:", response.data);
+        return response.data.urls;
+      }
+    } catch (error) {
+      console.error("Failed to fetch URLs:", error);
+      throw error;
+    }
   },
 
   deleteUrl: async (shortId: string) => {
-    const response = await api.delete(`/url/${shortId}`);
-    return response.data;
+    try {
+      // Try both potential endpoints
+      try {
+        const response = await api.delete(`/url/${shortId}`);
+        return response.data;
+      } catch (error) {
+        const response = await api.delete(`/url/remove/${shortId}`);
+        return response.data;
+      }
+    } catch (error) {
+      console.error(`Error deleting URL ${shortId}:`, error);
+      throw error;
+    }
   },
 
   getAnalytics: async (shortId: string) => {
-    const response = await api.get(`/url/analytics/${shortId}`);
-    return response.data;
+    try {
+      const response = await api.get(`/url/analytics/${shortId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching analytics for ${shortId}:`, error);
+      throw error;
+    }
   },
 
   getRedirectUrl: async (shortId: string) => {
-    const response = await api.get(`/url/${shortId}`);
-    return response.data;
+    try {
+      const response = await api.get(`/${shortId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error getting redirect URL for ${shortId}:`, error);
+      throw error;
+    }
   },
 
   generateQRCode: (shortId: string) => {
     return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${window.location.origin}/${shortId}`;
+  },
+
+  // Toggle authentication requirement
+  toggleAuthRequirement: async (shortId: string, requiresAuth: boolean) => {
+    try {
+      const response = await api.post(`/url/toggle-auth`, {
+        shortId,
+        requiresAuth,
+      });
+      return response.data;
+    } catch (error) {
+      console.error(`Error toggling auth requirement for ${shortId}:`, error);
+      throw error;
+    }
+  },
+
+  // Access a short URL that checks authentication
+  accessShortUrl: async (shortId: string) => {
+    try {
+      const response = await api.get(`/${shortId}`);
+      return {
+        success: true,
+        redirectUrl: response.data.redirectUrl,
+      };
+    } catch (error: any) {
+      // If error is due to authentication, handle it
+      if (error.response && error.response.status === 401) {
+        return { success: false, needsAuth: true };
+      }
+
+      // Handle other errors
+      return {
+        success: false,
+        error: error.response?.data?.error || "Failed to access URL",
+      };
+    }
   },
 };
 

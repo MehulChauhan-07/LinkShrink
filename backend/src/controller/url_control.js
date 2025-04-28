@@ -1,6 +1,8 @@
 const urlSchema = require("../models/url_Schema");
 const shortid = require("shortid");
 
+const { generateQRCodeFile } = require("./qr_generator");
+
 async function handlenewShortURL(req, res) {
   try {
     const body = req.body;
@@ -9,19 +11,32 @@ async function handlenewShortURL(req, res) {
     }
     const userUrls = await urlSchema.find({ createdBy: req.user._id });
     const shortId = shortid.generate();
-    await urlSchema.create({
+
+    // Create the short URL
+    const shortUrl = await urlSchema.create({
       shortId: shortId,
       redirectUrl: body.url,
       visitHistory: [],
       createdBy: req.user._id,
     });
+
+    // Generate QR code for the short URL
+    const baseUrl = req.protocol + "://" + req.get("host");
+    const fullShortUrl = `${baseUrl}/${shortId}`;
+    const qrCodePath = await generateQRCodeFile(fullShortUrl, shortId);
+
+    // Update the URL entry with QR code path
+    shortUrl.qrCodePath = qrCodePath;
+    await shortUrl.save();
+
     return res.status(200).render("home", {
       ind: shortId,
-      baseUrl: req.protocol + "://" + req.get("host"),
+      baseUrl: baseUrl,
       urls: userUrls,
       user: req.user,
       isAdmin: req.user && req.user.role === "ADMIN",
       message: "URL created successfully",
+      qrCodePath: qrCodePath,
     });
   } catch (error) {
     console.error("Error in handlenewShortURL:", error);
@@ -47,7 +62,7 @@ async function handleRedirectUrl(req, res) {
           },
         },
       },
-      { new: true } 
+      { new: true }
     );
 
     if (!entry) {
@@ -146,10 +161,52 @@ async function handleGetUrls(req, res) {
   }
 }
 
+// Add a new function for getting QR code
+async function handleGetQRCode(req, res) {
+  try {
+    const { shortId } = req.params;
+    const result = await urlSchema.findOne({ shortId });
+
+    if (!result) {
+      return res.status(404).json({
+        error: "URL not found",
+      });
+    }
+
+    // If QR code path exists, return it, otherwise generate a new one
+    if (result.qrCodePath) {
+      return res.status(200).json({
+        success: true,
+        qrCodePath: result.qrCodePath,
+      });
+    } else {
+      const baseUrl = req.protocol + "://" + req.get("host");
+      const fullShortUrl = `${baseUrl}/${shortId}`;
+      const qrCodePath = await generateQRCodeFile(fullShortUrl, shortId);
+
+      // Update the URL entry with QR code path
+      result.qrCodePath = qrCodePath;
+      await result.save();
+
+      return res.status(200).json({
+        success: true,
+        qrCodePath: qrCodePath,
+      });
+    }
+  } catch (error) {
+    console.error("Error in handleGetQRCode:", error);
+    return res.status(500).json({
+      success: false,
+      error: "Failed to get QR code",
+    });
+  }
+}
+
 module.exports = {
   handlenewShortURL,
   handleRedirectUrl,
   handleGetAnalytics,
   handleRemoveUrl,
+  handleGetQRCode,
   handleGetUrls,
 };

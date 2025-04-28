@@ -1,25 +1,19 @@
-require("dotenv").config();
-const http = require("http");
-
+const app = require("./src/index");
 const { connectToMongoDB } = require("./src/config/db");
 
-// const app = express();
-const app = require("./src/index");
-const server = http.createServer(app);
+const PORT = process.env.PORT || 3000;
 
+// Connect to MongoDB
 connectToMongoDB()
   .then(() => {
-    console.log("Connected to MongoDB successfully!");
+    console.log("MongoDB connected successfully!");
+
+    // Start the server
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
   })
   .catch((err) => {
-    console.error("Error connecting to MongoDB:", err);
+    console.error("Failed to connect to MongoDB:", err);
+    process.exit(1);
   });
-
-
-const PORT = process.env.PORT;
-server.listen(PORT, () => {
-  // console.log(`Server is running on port ${PORT}`);
-  console.log(
-    `Server running in ${process.env.BACKEND_URL} mode on port ${PORT}`
-  );
-});

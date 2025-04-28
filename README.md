@@ -2,130 +2,72 @@
 
 A modern URL shortening service built with React, TypeScript, and Node.js.
 
-## Features
+## Key Features
 
-- User authentication (signup/login)
-- URL shortening
-- URL analytics
-- Dashboard with statistics
-- Modern UI with Tailwind CSS and Shadcn UI
-- TypeScript for type safety
-- React Query for data fetching
-- Form validation with Zod
+- **User Authentication**: Secure signup/login system with JWT
+- **URL Management**: Create, track, and manage shortened URLs
+- **Comprehensive Analytics**: Track clicks, referrers, and user agents
+- **QR Code Generation**: Generate QR codes for shortened URLs
+- **Modern UI**: Built with Tailwind CSS and Shadcn UI
 
-## Tech Stack
+## Architecture
 
-### Frontend
-
-- React + Vite
-- TypeScript
-- Tailwind CSS
-- Shadcn UI
-- React Router
-- React Query
-- Axios
-- Zod
-- React Hook Form
-
-### Backend
-
-- Node.js
-- Express
-- MongoDB
-- JWT Authentication
-- EJS (for email templates)
-
-## Prerequisites
-
-- Node.js (v14 or higher)
-- MongoDB
-- npm or yarn
-
-## Setup
-
-1. Clone the repository:
-
-```bash
-git clone <repository-url>
-cd linkshrink
-```
-
-2. Install backend dependencies:
-
-```bash
-cd backend
-npm install
-```
-
-3. Install frontend dependencies:
-
-```bash
-cd ../frontend
-npm install
-```
-
-4. Create a `.env` file in the backend directory:
+LinkShrink follows a domain-driven design architecture:
 
 ```
-PORT=3000
-MONGODB_URI=mongodb://localhost:27017/url_shortener_jwt
-JWT_SECRET=your_jwt_secret
+frontend/ - React + TypeScript frontend
+backend/  - Express.js + MongoDB backend
 ```
 
-## Running the Application
+### Backend Architecture
 
-1. Start the backend server:
+- **Domain-based structure**: Code organized by business domain
+- **Service layer**: Business logic encapsulation
+- **Repository pattern**: Data access abstraction
+- **Middleware-based auth**: JWT authentication and role-based access control
 
-```bash
-cd backend
-npm start
-```
+### Frontend Architecture
 
-2. Start the frontend development server:
+- **React + TypeScript**: For type safety and better developer experience
+- **React Query**: For data fetching and caching
+- **Context API**: For global state management
+- **React Router**: For client-side routing
+- **TailwindCSS**: For styling
 
-```bash
-cd frontend
-npm run dev
-```
+## API Documentation
 
-The application will be available at:
+The API is documented using OpenAPI/Swagger. When running in development mode, you can access the documentation at `http://localhost:3000/api-docs`.
 
-- Frontend: http://localhost:5173
-- Backend: http://localhost:3000
+### Key Endpoints
 
-## API Endpoints
+#### Authentication
+- `POST /user/signup` - Create a new account
+- `POST /user/login` - Login to account
+- `GET /user/logout` - Logout
 
-### Authentication
+#### URL Management
+- `POST /url` - Create a new short URL
+- `GET /url` - Get all URLs for the current user
+- `DELETE /url/:shortId` - Delete a URL
+- `GET /url/analytics/:shortId` - Get analytics for a URL
 
-- POST /user/signup - Create a new account
-- POST /user/login - Login to account
-- GET /user/logout - Logout
+## Development Setup
 
-### URLs
-
-- POST /url - Create a new short URL
-- GET /url - Get all URLs for the current user
-- DELETE /url/:shortId - Delete a URL
-- GET /url/analytics/:shortId - Get analytics for a URL
-
-## Development
-
-### Backend
-
-The backend is built with Express.js and uses MongoDB for data storage. It provides both API endpoints and serves the frontend application.
-
-### Frontend
-
-The frontend is built with React and TypeScript, using Vite as the build tool. It uses modern React patterns and libraries for a great developer experience.
+[rest of your existing setup instructions]
 
 ## Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+Please read our [Contributing Guide](CONTRIBUTING.md) before submitting a Pull Request.
 
-## License
+## Performance Considerations
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+- URL lookups are optimized with database indexes
+- Frequently accessed URLs are cached in memory
+- Request validation happens early in the request lifecycle
+
+## Security Features
+
+- JWT-based authentication
+- CSRF protection
+- Rate limiting on critical endpoints
+- Input sanitization and validation

@@ -15,7 +15,7 @@ const urlSchema = z.object({
 
 type UrlFormData = z.infer<typeof urlSchema>;
 
-export default function Home() {
+export default function HomePage() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const queryClient = useQueryClient();

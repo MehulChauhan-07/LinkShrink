@@ -16,10 +16,28 @@ const urlSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    qrCodePath: {
+      type: String,
+      default: null,
+    },
+    // Adding expirationDate for URL expiry feature
+    expirationDate: {
+      type: Date,
+      default: null,
+    },
+    // Adding isPasswordProtected and password fields for password protection
+    isPasswordProtected: {
+      type: Boolean,
+      default: false,
+    },
+    password: {
+      type: String,
+      default: null,
+    },
   },
   { timestamps: true }
 );
 
-const URL = mongoose.model("URL", urlSchema); // Updated model name to "URL"
+const URL = mongoose.model("URL", urlSchema);
 
 module.exports = URL;
