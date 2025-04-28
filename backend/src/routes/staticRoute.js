@@ -1,6 +1,6 @@
 const express = require("express");
 const URL = require("../models/url_Schema");
-const { restrictTo } = require("../midddelware/auth");
+const { restrictTo } = require("../middleware/auth");
 
 const router = express.Router();
 

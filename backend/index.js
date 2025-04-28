@@ -4,16 +4,17 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-const URL = require("./models/url_Schema");
-const { connectToMongoDB } = require("./mongo_config");
+const URL = require("./src/models/url_Schema");
+// const { connectToMongoDB } = require("./mongo_config");
+const { connectToMongoDB } = require("./src/config/db");
 
-const { checkForAuthorization, restrictTo } = require("./midddelware/auth");
-const staticRoute = require("./routes/staticRoute");
-const testRouter = require("./routes/test");
-const urlRouter = require("./routes/url");
-const userRouter = require("./routes/user");
+const { checkForAuthorization, restrictTo } = require("./src/middleware/auth");
+const staticRoute = require("./src/routes/staticRoute");
+// const testRouter = require("./src/routes/test");
+const urlRouter = require("./src/routes/url");
+const userRouter = require("./src/routes/user");
 
-connectToMongoDB("mongodb://localhost:27017/url_shortener_jwt")
+connectToMongoDB()
   .then(() => {
     console.log("Connected to MongoDB successfully!");
   })
@@ -26,7 +27,7 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:5173", // Vite's default port
+    origin: process.env.FRONTEND_URL, // Vite's default port is 5173
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "Accept"],
@@ -49,58 +50,58 @@ app.use((req, res, next) => {
 app.get("/favicon.ico", (req, res) => res.status(204).end());
 
 // View engine setup
-app.set("view engine", "ejs").set("views", path.resolve("./views"));
+app.set("view engine", "ejs").set("views", path.resolve("./src/views"));
 
-// Public routes (no authentication required)
-app.get("/:shortId", async (req, res, next) => {
-  try {
-    const { shortId } = req.params;
+// // Public routes (no authentication required)
+// app.get("/:shortId", async (req, res, next) => {
+//   try {
+//     const { shortId } = req.params;
 
-    // Skip handling for known routes
-    if (["login", "signup", "dashboard", "favicon.ico"].includes(shortId)) {
-      return next();
-    }
+//     // Skip handling for known routes
+//     if (["login", "signup", "dashboard", "favicon.ico"].includes(shortId)) {
+//       return next();
+//     }
 
-    // Find the URL and track the visit
-    const entry = await URL.findOneAndUpdate(
-      { shortId },
-      {
-        $push: {
-          visitHistory: {
-            timestamp: Date.now(),
-          },
-        },
-      },
-      { new: true }
-    );
+//     // Find the URL and track the visit
+//     const entry = await URL.findOneAndUpdate(
+//       { shortId },
+//       {
+//         $push: {
+//           visitHistory: {
+//             timestamp: Date.now(),
+//           },
+//         },
+//       },
+//       { new: true }
+//     );
 
-    if (!entry) {
-      // If not found, proceed to next middleware/route
-      return next();
-    }
+//     if (!entry) {
+//       // If not found, proceed to next middleware/route
+//       return next();
+//     }
 
-    // Handle API requests
-    if (req.headers.accept === "application/json") {
-      return res.json({
-        success: true,
-        redirectUrl: entry.redirectUrl,
-      });
-    }
+//     // Handle API requests
+//     if (req.headers.accept === "application/json") {
+//       return res.json({
+//         success: true,
+//         redirectUrl: entry.redirectUrl,
+//       });
+//     }
 
-    // Handle browser requests
-    return res.redirect(entry.redirectUrl);
-  } catch (error) {
-    console.error("Error redirecting:", error);
-    return next();
-  }
-});
+//     // Handle browser requests
+//     return res.redirect(entry.redirectUrl);
+//   } catch (error) {
+//     console.error("Error redirecting:", error);
+//     return next();
+//   }
+// });
 
 // Protected routes (authentication required)
 app.use(checkForAuthorization);
 app.use("/", staticRoute);
 app.use("/url", restrictTo(["NORMAL", "ADMIN"]), urlRouter);
 app.use("/user", userRouter);
-app.use("/test", testRouter);
+// app.use("/test", testRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -111,7 +112,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

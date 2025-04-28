@@ -110,21 +110,27 @@ async function handleUserlogin(req, res) {
     const token = setUser(user);
     console.log("Token created successfully");
 
+    const userResponse = {
+      username: user.username,
+      email: user.email,
+      role: user.role,
+    };
+
     if (req.headers.accept === "application/json") {
       console.log("Sending JSON response");
       return res.status(200).json({
         success: true,
         token,
-        user: {
-          username: user.username,
-          email: user.email,
-          role: user.role,
-        },
+        user: userResponse,
       });
     }
 
     // For web requests, set cookie and redirect
-    res.cookie("uid", token, { httpOnly: true });
+    res.cookie("uid", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    });
     return res.status(200).redirect("/");
   } catch (error) {
     console.error("Login Error:", error);

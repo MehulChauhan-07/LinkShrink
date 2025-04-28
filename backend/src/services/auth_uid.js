@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const secret = process.env.JWT_SECRET || "Mehul-2004@#$%"; // Use environment variable if available
-
+const secret = process.env.JWT_SECRET; // Use environment variable if available
+const expiresIn = process.env.JWT_EXPIRES_IN; 
 function setUser(user) {
   return jwt.sign(
     {
@@ -10,7 +10,7 @@ function setUser(user) {
     },
     secret,
     {
-      expiresIn: "24h", // Token expires in 24 hours
+      expiresIn: expiresIn, // Token expires in 24 hours
     }
   );
 }
