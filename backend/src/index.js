@@ -3,6 +3,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const helmet = require("helmet");
 const { checkForAuthorization, restrictTo } = require("./middleware/auth");
 const { checkUrlExpiration } = require("./controller/url_expiry");
 const staticRoute = require("./routes/staticRoute");
@@ -10,6 +11,7 @@ const urlRouter = require("./routes/url");
 const userRouter = require("./routes/user");
 const qrRouter = require("./routes/qr");
 const URL = require("./models/url_Schema");
+const { errorHandler } = require("./middleware/errorMiddleware");
 
 const app = express();
 // Middleware
@@ -26,7 +28,7 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
+app.use(helmet());
 // Logging middleware
 app.use((req, res, next) => {
   console.log(`${req.method} request to ${req.url}`);
@@ -104,6 +106,7 @@ app.get("/:shortId", checkUrlExpiration, async (req, res, next) => {
 
 // Protected routes (authentication required)
 app.use(checkForAuthorization);
+app.use(errorHandler);
 app.use("/", staticRoute);
 app.use("/url", restrictTo(["NORMAL", "ADMIN"]), urlRouter);
 app.use("/user", userRouter);

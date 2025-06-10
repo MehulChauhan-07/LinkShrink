@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+// import { ToastContainer } from "react-toastify";
+import { Toaster } from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./contexts/AuthContext";
 
@@ -25,11 +26,15 @@ const App: React.FC = () => {
           <Navbar />
           <main className="flex-grow">
             <Routes>
-              <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
 
               {/* Protected routes */}
+              <Route
+                path="/"
+                element={<PrivateRoute element={<HomePage />} />}
+              />
+
               <Route
                 path="/dashboard"
                 element={<PrivateRoute element={<DashboardPage />} />}
@@ -46,7 +51,10 @@ const App: React.FC = () => {
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </main>
-          <ToastContainer
+          <Toaster
+            position="bottom-right"
+          />
+          {/* <ToastContainer
             position="bottom-right"
             autoClose={5000}
             hideProgressBar={false}
@@ -57,7 +65,7 @@ const App: React.FC = () => {
             draggable
             pauseOnHover
             theme="colored"
-          />
+          /> */}
         </div>
       </BrowserRouter>
     </AuthProvider>

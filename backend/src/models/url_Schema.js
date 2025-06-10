@@ -11,7 +11,14 @@ const urlSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    visitHistory: [{ timestamp: { type: [Date], default: [] } }],
+    visitHistory: [
+      {
+        timestamp: { type: Date, default: Date.now },
+        ipAddress: { type: String, default: null },
+        userAgent: { type: String, default: null },
+        isApiRequest: { type: Boolean, default: false },
+      },
+    ],
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

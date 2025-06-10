@@ -12,7 +12,8 @@ import {
   FiUserPlus,
 } from "react-icons/fi";
 import { useAuth } from "../contexts/AuthContext";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

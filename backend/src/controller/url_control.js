@@ -1,5 +1,5 @@
 const urlSchema = require("../models/url_Schema");
-const shortid = require("shortid");
+const { nanoid } = require("nanoid");
 
 const { generateQRCodeFile } = require("./qr_generator");
 
@@ -10,7 +10,7 @@ async function handlenewShortURL(req, res) {
       return res.status(400).json({ error: "URL is required" });
     }
     const userUrls = await urlSchema.find({ createdBy: req.user._id });
-    const shortId = shortid.generate();
+    const shortId = nanoid(8);
 
     // Create the short URL
     const shortUrl = await urlSchema.create({
@@ -52,13 +52,38 @@ async function handleRedirectUrl(req, res) {
   try {
     const { shortId } = req.params;
 
-    // Find the URL and track the visit
+    // Skip tracking for prefetch requests
+    if (
+      req.headers["purpose"] === "prefetch" ||
+      req.headers["x-purpose"] === "prefetch"
+    ) {
+      console.log("Skipping visit tracking for prefetch request");
+      const entry = await urlSchema.findOne({ shortId });
+      if (!entry) {
+        return res.status(404).send("Short URL not found");
+      }
+      return res.redirect(entry.redirectUrl);
+    }
+
+    console.log("Redirect request received:", {
+      shortId,
+      method: req.method,
+      url: req.originalUrl,
+      headers: req.headers,
+      ip: req.ip,
+      userAgent: req.headers["user-agent"],
+    });
+
+    // Track the visit for both API and browser requests
     const entry = await urlSchema.findOneAndUpdate(
       { shortId },
       {
         $push: {
           visitHistory: {
             timestamp: Date.now(),
+            ipAddress: req.ip || req.connection.remoteAddress,
+            userAgent: req.headers["user-agent"],
+            isApiRequest: req.headers.accept === "application/json",
           },
         },
       },
@@ -66,9 +91,20 @@ async function handleRedirectUrl(req, res) {
     );
 
     if (!entry) {
+      console.log("URL not found for shortId:", shortId);
       return res.status(404).send("Short URL not found");
     }
 
+    // Handle API requests
+    if (req.headers.accept === "application/json") {
+      return res.json({
+        success: true,
+        redirectUrl: entry.redirectUrl,
+      });
+    }
+
+    // Handle browser requests
+    console.log("Redirecting to:", entry.redirectUrl);
     return res.redirect(entry.redirectUrl);
   } catch (error) {
     console.error("Error redirecting:", error);

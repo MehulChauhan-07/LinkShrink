@@ -182,10 +182,20 @@ export const urlApi = {
 
   getRedirectUrl: async (shortId: string) => {
     try {
-      const response = await api.get(`/${shortId}`);
+      const response = await api.get(`/${shortId}`, {
+        // Prevent axios from following redirects
+        maxRedirects: 0,
+        // Only accept JSON responses
+        headers: {
+          Accept: "application/json",
+        },
+      });
       return response.data;
-    } catch (error) {
-      console.error(`Error getting redirect URL for ${shortId}:`, error);
+    } catch (error: any) {
+      // If error is due to authentication, handle it
+      if (error.response && error.response.status === 401) {
+        return { success: false, needsAuth: true };
+      }
       throw error;
     }
   },

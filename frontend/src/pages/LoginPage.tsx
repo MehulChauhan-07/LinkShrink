@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { toast } from "react-toastify";
-
+// import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 const LoginPage: React.FC = () => {
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,7 +37,14 @@ const LoginPage: React.FC = () => {
       toast.success("Login successful!");
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("Login failed. Please check your credentials and try again.");
+      let errorMessage = "Login failed. Please check your credentials and try again.";
+      if (typeof error === "object" && error !== null && "response" in error) {
+        const err = error as { response?: { data?: { message?: string } } };
+        if (err.response?.data?.message) {
+          errorMessage = err.response.data.message;
+        }
+      }
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

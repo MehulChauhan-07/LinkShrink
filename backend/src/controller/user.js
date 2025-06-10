@@ -1,8 +1,13 @@
 const User = require("../models/users_Schema");
 // const { v4: uuidv4 } = require("uuid");
+const { validationResult } = require("express-validator");
 const { setUser } = require("../services/auth_uid");
 
 async function handleUserSignup(req, res) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
   try {
     const { username, name, email, password } = req.body;
 

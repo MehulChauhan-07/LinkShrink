@@ -19,12 +19,12 @@ const RedirectHandler: React.FC = () => {
       }
 
       try {
-        // Try to get the redirect URL
+        // Make a single request to get the redirect URL
         const response = await urlApi.getRedirectUrl(shortId);
 
         if (response.success && response.redirectUrl) {
-          // If successful, redirect to the target URL
-          window.location.href = response.redirectUrl;
+          // Use replace instead of href to prevent back button issues
+          window.location.replace(response.redirectUrl);
         } else if (response.needsAuth && !user) {
           // If authentication is required and user is not logged in
           // Store the intended URL for redirection after login
