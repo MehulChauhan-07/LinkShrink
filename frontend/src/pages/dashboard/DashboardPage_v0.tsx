@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { urlApi } from "../services/api";
-import { useAuth } from "../contexts/AuthContext";
+import { urlApi } from "../../services/api";
+import { useAuth } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
-import URLCard from "../components/URLcard";
+import URLCard from "../../components/urlHandlers/URLcard";
 import { FiLink, FiPlus, FiAlertCircle } from "react-icons/fi";
 
 interface URL {
@@ -12,7 +12,6 @@ interface URL {
   visitHistory: Array<{ timestamp: string }>;
   requiresAuth?: boolean;
 }
-
 
 const DashboardPage: React.FC = () => {
   const [urls, setUrls] = useState<URL[]>([]);

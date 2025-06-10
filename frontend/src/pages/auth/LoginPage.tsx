@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 // import { toast } from "react-toastify";
 import { toast } from "react-hot-toast";
+
 const LoginPage: React.FC = () => {
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,7 +38,8 @@ const LoginPage: React.FC = () => {
       toast.success("Login successful!");
     } catch (error) {
       console.error("Login error:", error);
-      let errorMessage = "Login failed. Please check your credentials and try again.";
+      let errorMessage =
+        "Login failed. Please check your credentials and try again.";
       if (typeof error === "object" && error !== null && "response" in error) {
         const err = error as { response?: { data?: { message?: string } } };
         if (err.response?.data?.message) {
@@ -51,9 +53,9 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-50 px-4">
-      <div className="bg-white rounded-lg shadow-md w-full max-w-md p-8">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+    <div className="flex justify-center items-center min-h-screen bg-background px-4">
+      <div className="bg-card rounded-lg shadow-md w-full max-w-md p-8">
+        <h2 className="text-2xl font-bold mb-6 text-center text-foreground">
           Log In
         </h2>
 
@@ -61,7 +63,7 @@ const LoginPage: React.FC = () => {
           <div className="mb-4">
             <label
               htmlFor="usernameOrEmail"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground mb-1"
             >
               Username or Email
             </label>
@@ -70,7 +72,7 @@ const LoginPage: React.FC = () => {
               type="text"
               value={usernameOrEmail}
               onChange={(e) => setUsernameOrEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-input bg-background text-foreground rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring"
               required
             />
           </div>
@@ -78,7 +80,7 @@ const LoginPage: React.FC = () => {
           <div className="mb-6">
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="block text-sm font-medium text-foreground mb-1"
             >
               Password
             </label>
@@ -87,14 +89,14 @@ const LoginPage: React.FC = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-input bg-background text-foreground rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring"
               required
             />
           </div>
 
           <button
             type="submit"
-            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
+            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ring ${
               isSubmitting ? "opacity-75 cursor-not-allowed" : ""
             }`}
             disabled={isSubmitting}
@@ -102,7 +104,7 @@ const LoginPage: React.FC = () => {
             {isSubmitting ? (
               <>
                 <svg
-                  className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                  className="animate-spin -ml-1 mr-2 h-4 w-4 text-primary-foreground"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -130,9 +132,9 @@ const LoginPage: React.FC = () => {
         </form>
 
         <div className="mt-4 text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-blue-600 hover:text-blue-800">
+            <Link to="/signup" className="text-primary hover:text-primary/90">
               Sign up
             </Link>
           </p>

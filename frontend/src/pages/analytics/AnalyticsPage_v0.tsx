@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { FiArrowLeft, FiUser, FiClock } from "react-icons/fi";
-import { urlApi } from "../services/api";
-import { useAuth } from "../contexts/AuthContext";
+import { urlApi } from "../../services/api";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface ClickAnalytics {
   timestamp: string;

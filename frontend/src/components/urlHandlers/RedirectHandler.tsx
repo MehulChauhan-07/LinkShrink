@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { urlApi } from "../services/api";
-import { useAuth } from "../contexts/AuthContext";
+import { urlApi } from "../../services/api";
+import { useAuth } from "../../contexts/AuthContext";
 
 const RedirectHandler: React.FC = () => {
   const { shortId } = useParams<{ shortId: string }>();

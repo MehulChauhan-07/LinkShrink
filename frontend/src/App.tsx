@@ -1,73 +1,66 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import { ToastContainer } from "react-toastify";
 import { Toaster } from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./contexts/AuthContext";
 
 // Components
-import Navbar from "./components/Navbar";
-import PrivateRoute from "./components/PrivateRoute";
-import RedirectHandler from "./components/RedirectHandler";
+import Navbar from "./components/layout/Navbar";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import RedirectHandler from "./components/urlHandlers/RedirectHandler";
 
 // Pages
+// import HomePage from "./pages/Homepage_v0";
 import HomePage from "./pages/HomePage";
-import DashboardPage from "./pages/DashboardPage";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import AnalyticsPage from "./pages/AnalyticsPage";
-import NotFoundPage from "./pages/NotFoundPage";
+// import DashboardPage from "./pages/dashboard/DashboardPage_v0";
+import DashboardPage from "./pages/dashboard/DashboardPage";
+// import AnalyticsPage from "./pages/analytics/AnalyticsPage_v0";
+import AnalyticsPage from "./pages/analytics/AnalyticsPage";
+import LoginPage from "./pages/auth/LoginPage";
+import SignupPage from "./pages/auth/SignupPage";
+import NotFoundPage from "./pages/common/NotFoundPage";
 
 const App: React.FC = () => {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <div className="min-h-screen bg-gray-50 flex flex-col">
+      <Router>
+        {/* <div className="min-h-screen bg-background text-foreground transition-colors duration-200"> */}
           <Navbar />
-          <main className="flex-grow">
+          {/* <main className="container mx-auto px-4 py-8"> */}
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
-
-              {/* Protected routes */}
               <Route
                 path="/"
-                element={<PrivateRoute element={<HomePage />} />}
+                element={<ProtectedRoute element={<HomePage />} />}
               />
-
               <Route
                 path="/dashboard"
-                element={<PrivateRoute element={<DashboardPage />} />}
+                element={<ProtectedRoute element={<DashboardPage />} />}
               />
               <Route
                 path="/analytics/:shortId"
-                element={<PrivateRoute element={<AnalyticsPage />} />}
+                element={<ProtectedRoute element={<AnalyticsPage />} />}
               />
-
-              {/* Redirect handler for shortened URLs */}
               <Route path="/:shortId" element={<RedirectHandler />} />
-
-              {/* 404 route */}
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
-          </main>
-          <Toaster
-            position="bottom-right"
-          />
-          {/* <ToastContainer
-            position="bottom-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="colored"
-          /> */}
-        </div>
-      </BrowserRouter>
+          {/* </main> */}
+        {/* </div> */}
+      </Router>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: "var(--background)",
+            color: "var(--foreground)",
+            borderRadius: "8px",
+            border: "1px solid var(--border)",
+          },
+        }}
+      />
     </AuthProvider>
   );
 };
